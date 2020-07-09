@@ -30,7 +30,8 @@ const theme = {
     colors: {
         ...DefaultTheme.colors,
         primary: colors.PRIMARY,
-        accent: colors.SECONDARY,
+        accent: colors.SECONDARY
+        // surface: colors.DANGER
     },
     fonts: configureFonts(fontConfig),
 };

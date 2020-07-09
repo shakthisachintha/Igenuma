@@ -1,6 +1,8 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import AuthNavigator from './navigation/AuthNavigator';
+import Screen from './components/Screen';
+// import { DefaultTheme,  } from '@react-navigation/native';
 
 const App = () => {
   return (

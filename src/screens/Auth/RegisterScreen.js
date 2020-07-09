@@ -1,12 +1,13 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Button } from 'react-native-paper'
+import { AppButton } from '../../components'
+
 
 const RegisterScreen = ({ navigation }) => {
     return (
         <View>
             <Text>Register Screen</Text>
-            <Button mode="outlined" onPress={() => navigation.navigate("Login")} >Login</Button>
+            <AppButton title="Login" onPress={() => navigation.navigate("Login")} />
         </View>
     )
 }
