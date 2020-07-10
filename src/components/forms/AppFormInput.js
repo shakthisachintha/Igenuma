@@ -12,6 +12,7 @@ import AppText from '../AppText';
 const AppFormInput = ({ name, indicateSymbol = true, ...otherProps }) => {
 
     const { setFieldTouched, handleChange, errors, touched } = useFormikContext();
+
     const errorSymbol = (touched, error) => {
         if (indicateSymbol) {
             if (!touched) return null;
@@ -24,6 +25,7 @@ const AppFormInput = ({ name, indicateSymbol = true, ...otherProps }) => {
             return null;
         }
     }
+
     return (
 
         <>
