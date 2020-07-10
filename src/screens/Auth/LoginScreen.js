@@ -7,11 +7,13 @@ import images from '../../config/images'
 import { AppForm, AppFormInput, SubmitButton } from '../../components/forms'
 import { AppButton } from '../../components'
 import { ScrollView } from 'react-native-gesture-handler'
+import useAuth from '../../Services/useAuth';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email().required().label("Email address"),
     password: Yup.string().required().min(6).label("Password")
 });
+
 
 const LoginScreen = ({ navigation }) => {
     return (
@@ -31,7 +33,7 @@ const LoginScreen = ({ navigation }) => {
                 <AppForm
                     initialValues={{ email: "", password: "" }}
                     validationSchema={validationSchema}
-                    onSubmit={(vals) => { console.log(vals) }}
+                    onSubmit={useAuth().loginUser}
                 >
                     <AppFormInput
                         autoCapitalize="none"

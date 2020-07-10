@@ -1,21 +1,25 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 import * as Yup from 'yup';
 
-import colors from '../../config/styles/colors'
+
+import useAuth from '../../Services/useAuth'
 import { AppForm, AppFormInput, SubmitButton } from '../../components/forms'
 import { AppButton, AppText } from '../../components'
-import { ScrollView } from 'react-native-gesture-handler'
 import AppFormRadioButton from '../../components/forms/AppFormRadioButton';
 import AppFormCheckbox from '../../components/forms/AppFormCheckbox';
+import colors from '../../config/styles/colors'
 
 const validationSchema = Yup.object().shape({
+    name: Yup.string().required().label("Name"),
     email: Yup.string().email().required().label("Email address"),
     password: Yup.string().required().min(6).label("Password"),
     userType: Yup.string().required().label('User role'),
-    concent: Yup.boolean().required().oneOf([true], "You should agree here"),
-    confirm_password: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match')
+    // concent: Yup.boolean().required().oneOf([true], "You should agree here"),
+    confirm_password: Yup.string().required().oneOf([Yup.ref('password')], 'Passwords must match')
 });
+
 
 const RegisterScreen = ({ navigation }) => {
 
@@ -28,10 +32,16 @@ const RegisterScreen = ({ navigation }) => {
                 </View>
 
                 <AppForm
-                    initialValues={{ email: "", password: "", userType: "student", concent: false }}
+                    initialValues={{ email: "", password: "", confirm_password: "", userType: "student", concent: false }}
                     validationSchema={validationSchema}
-                    onSubmit={(vals) => { console.log(errors) }}
+                    onSubmit={useAuth().registerUser}
                 >
+                    <AppFormInput
+                        autoCapitalize="words"
+                        icon="account"
+                        name="name"
+                        placeholder="Name"
+                    />
                     <AppFormInput
                         autoCapitalize="none"
                         autoCorrect={false}
@@ -44,7 +54,7 @@ const RegisterScreen = ({ navigation }) => {
                         autoCorrect={false}
                         secureTextEntry
                         indicateSymbol={false}
-                        icon="lock"
+                        icon="shield"
                         name="password"
                         placeholder="Password"
                     />
@@ -53,7 +63,7 @@ const RegisterScreen = ({ navigation }) => {
                         autoCorrect={false}
                         secureTextEntry
                         indicateSymbol={true}
-                        icon="lock"
+                        icon="shield-refresh"
                         name="confirm_password"
                         placeholder="Re-password"
                     />
@@ -62,13 +72,14 @@ const RegisterScreen = ({ navigation }) => {
                         { label: 'Student', value: 'student' },
                         { label: 'Teacher', value: 'teacher' }
                     ]} />
-
+                    {/* 
                     <AppFormCheckbox
                         name="concent"
                         label="I agree to the Terms of Services and Privacy Policy."
-                    />
+                    /> */}
 
                     <SubmitButton containerStyle={{ marginTop: 15 }} title="Register" />
+
                 </AppForm>
 
                 <View>
