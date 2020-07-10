@@ -2,15 +2,17 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 import { Alert } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../auth/context';
 import _ from 'lodash';
 // import React from 'react'
 
 export default useAuth = () => {
     const { user, setUser } = useContext(AuthContext);
+    const [isLoading, setIsLoading] = useState(false);
 
     function onAuthStateChanged(data) {
+        setIsLoading(true);
         console.log(data);
         if (data) {
             firestore().collection('users').doc(data.uid).get().then(resp => {
@@ -18,13 +20,16 @@ export default useAuth = () => {
                 if (userData) {
                     let userObj = _.pick(userData, ['email', 'name', 'userType', 'image']);
                     userObj.image = data.photoURL;
+                    setIsLoading(false);
                     setUser(userObj);
                 }
             }).catch(() => {
+                setIsLoading(false);
                 setUser(null);
                 alert("Unkown login error occured!");
             })
         } else {
+            setIsLoading(false);
             setUser(null);
         }
     }
@@ -34,27 +39,35 @@ export default useAuth = () => {
         return subscriber; // unsubscribe on unmount
     }, [])
 
-    const loginUser = ({ email, password }, actions) => {
+    const loginUser = async ({ email, password }) => {
+        setIsLoading(true);
+        try {
+            await auth().signInWithEmailAndPassword(email, password);
+        } catch (error) {
+            console.log(error)
+            setIsLoading(false);
+            if (error.code == 'auth/invalid-email') return alert("Invalid Email address or password");
+            if (error.code == 'auth/user-not-found') return alert("There is no user corresponding to the email address.");
+            if (error.code == 'auth/wrong-password') return alert("Invalid Email address or password.");
+        }
 
-        auth().signInWithEmailAndPassword(email, password)
-            .catch(error => {
-                console.log(error)
-                if (error.code == 'auth/invalid-email') return alert("Invalid Email address or password");
-                if (error.code == 'auth/user-not-found') return alert("There is no user corresponding to the email address.");
-                if (error.code == 'auth/wrong-password') return alert("Invalid Email address or password.");
-            }).finally(() => {
-                actions.setSubmitting(false);
-            });
     }
 
-    const logOutUser = () => {
-        auth().signOut()
-            .then(() => {
-                setUser(null);
-            });
+
+    const logOutUser = async () => {
+        setIsLoading(true);
+        try {
+            await auth().signOut();
+            setIsLoading(false);
+            setUser(null);
+        } catch (error) {
+            alert("Error occured on logout");
+            setIsLoading(false);
+        }
     }
 
     const registerUser = ({ name, email, password, userType }, actions) => {
+        setIsLoading(true);
         const userCollection = firestore().collection('users');
         auth().createUserWithEmailAndPassword(email, password)
             .then((response) => {
@@ -64,11 +77,11 @@ export default useAuth = () => {
                 })
                     .catch(error => {
                         alert("Sorry unkown error occured");
-                    }).finally(() => {
-                        actions.setSubmitting(false);
+                        setIsLoading(false);
                     })
             })
             .catch(error => {
+                setIsLoading(false);
                 if (error.code === 'auth/email-already-in-use') {
                     Alert.alert(
                         "Registration Failed!",
@@ -83,12 +96,10 @@ export default useAuth = () => {
                     );
                 }
             })
-
     }
 
 
-
-    return { user, setUser, registerUser, loginUser, logOutUser }
+    return { user, setUser, registerUser, loginUser, logOutUser, isLoading }
 
 
 }

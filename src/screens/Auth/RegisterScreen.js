@@ -23,6 +23,8 @@ const validationSchema = Yup.object().shape({
 
 const RegisterScreen = ({ navigation }) => {
 
+    const auth = useAuth()
+
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
 
@@ -34,7 +36,7 @@ const RegisterScreen = ({ navigation }) => {
                 <AppForm
                     initialValues={{ email: "", password: "", confirm_password: "", userType: "student", concent: false }}
                     validationSchema={validationSchema}
-                    onSubmit={useAuth().registerUser}
+                    onSubmit={auth.registerUser}
                 >
                     <AppFormInput
                         autoCapitalize="words"
@@ -78,13 +80,12 @@ const RegisterScreen = ({ navigation }) => {
                         label="I agree to the Terms of Services and Privacy Policy."
                     /> */}
 
-                    <SubmitButton containerStyle={{ marginTop: 15 }} title="Register" />
+                    <SubmitButton loading={auth.isLoading} containerStyle={{ marginTop: 15 }} title="Register" />
 
                 </AppForm>
 
                 <View>
                     <AppButton containerStyle={{ backgroundColor: null }} btnTextStyle={{ color: colors.PRIMARY, fontSize: 15, textTransform: null }} title={<AppText style={{ color: colors.SECONDARY }}>Have an account? <AppText style={{ color: colors.PRIMARY }}>Login</AppText> </AppText>} onPress={() => navigation.navigate("Login")} />
-
                 </View>
             </View>
         </ScrollView>

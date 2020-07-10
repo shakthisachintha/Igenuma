@@ -3,10 +3,10 @@ import { useFormikContext } from 'formik'
 import AppButton from '../AppButton';
 
 
-const SubmitButton = ({ title, ...otherProps }) => {
-    const { handleSubmit, isSubmitting } = useFormikContext();
+const SubmitButton = ({ title, loading, ...otherProps }) => {
+    const { handleSubmit } = useFormikContext();
     return (
-        <AppButton loading={isSubmitting} title={title} {...otherProps} onPress={handleSubmit} />
+        <AppButton loading={loading} title={title} {...otherProps} onPress={handleSubmit} />
     )
 }
 

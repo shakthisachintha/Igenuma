@@ -1,12 +1,13 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 import * as Yup from 'yup';
 
 import colors from '../../config/styles/colors'
 import images from '../../config/images'
 import { AppForm, AppFormInput, SubmitButton } from '../../components/forms'
 import { AppButton } from '../../components'
-import { ScrollView } from 'react-native-gesture-handler'
+
 import useAuth from '../../Services/useAuth';
 
 const validationSchema = Yup.object().shape({
@@ -16,6 +17,9 @@ const validationSchema = Yup.object().shape({
 
 
 const LoginScreen = ({ navigation }) => {
+
+    const auth = useAuth()
+
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.logoContainer}>
@@ -33,7 +37,7 @@ const LoginScreen = ({ navigation }) => {
                 <AppForm
                     initialValues={{ email: "", password: "" }}
                     validationSchema={validationSchema}
-                    onSubmit={useAuth().loginUser}
+                    onSubmit={auth.loginUser}
                 >
                     <AppFormInput
                         autoCapitalize="none"
@@ -54,7 +58,7 @@ const LoginScreen = ({ navigation }) => {
                         placeholder="Password"
                     />
 
-                    <SubmitButton title="Login" />
+                    <SubmitButton loading={auth.isLoading} title="Login" />
                 </AppForm>
 
                 <View style={styles.bottomContainer}>

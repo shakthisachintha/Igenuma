@@ -3,10 +3,12 @@ import { TouchableOpacity, StyleSheet, Text, ActivityIndicator } from 'react-nat
 
 import colors from '../config/styles/colors'
 
-const AppButton = ({ title, onPress, loading, disabled, containerStyle, btnTextStyle }) => {
+const AppButton = ({ title, onPress, loading = false, containerStyle, btnTextStyle }) => {
+    const bgColor = !loading ? "black" : "#292929"
     return (
-        <TouchableOpacity activeOpacity={0.85} disabled={disabled} style={[styles.button, containerStyle]} onPress={onPress}>
+        <TouchableOpacity activeOpacity={0.85} disabled={loading} style={[{ ...styles.button, backgroundColor: bgColor }, containerStyle]} onPress={onPress}>
             {loading && <ActivityIndicator style={{ marginHorizontal: 15 }} size="small" color={colors.SUCCESS} />}
+
             <Text style={[styles.btnText, btnTextStyle]}>{title}</Text>
         </TouchableOpacity>
     )
@@ -17,7 +19,7 @@ export default AppButton
 const styles = StyleSheet.create({
     button: {
         flexDirection: "row",
-        backgroundColor: "black",
+        // backgroundColor: '#252525',
         borderRadius: 25,
         justifyContent: 'center',
         alignItems: "center",
