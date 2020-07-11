@@ -22,7 +22,7 @@ const DashboardNavigator = () => (
         <Drawer.Screen options={{ drawerLabel: "Courses", drawerIcon: ({ size, color }) => <AppIcon name="book-search" size={size + 5} iconColor={color} backgroundColor="white" /> }} name="Courses" component={CoursesScreen} />
         <Drawer.Screen options={{ drawerLabel: "Enrolled Courses", drawerIcon: ({ size, color }) => <AppIcon name="book-open-page-variant" size={size + 5} iconColor={color} backgroundColor="white" /> }} name="MyCourses" component={MyCoursesScreen} />
         <Drawer.Screen options={{ drawerLabel: "Create Course", drawerIcon: ({ size, color }) => <AppIcon name="book-plus-multiple" size={size + 5} iconColor={color} backgroundColor="white" /> }} name="CreateCourseScreen" component={CreateCourseScreen} />
-        <Drawer.Screen options={{ drawerLabel: "My Courses", drawerIcon: ({ size, color }) => <AppIcon name="book-plus-multiple" size={size + 5} iconColor={color} backgroundColor="white" /> }} name="MyCoursesTeacher" component={MyCoursesScreen} />
+        <Drawer.Screen options={{ drawerLabel: "Manage Courses", drawerIcon: ({ size, color }) => <AppIcon name="file-cog" size={size + 5} iconColor={color} backgroundColor="white" /> }} name="MyCoursesTeacher" component={MyCoursesScreen} />
     </Drawer.Navigator>
 )
 

@@ -1,14 +1,10 @@
 import React from 'react'
 import { Image, StyleSheet, TouchableWithoutFeedback, View, Button } from 'react-native';
-import {
-    DrawerContentScrollView,
-    DrawerItemList, DrawerItem
-} from "@react-navigation/drawer"
+
 
 import images from '../config/images';
-import { AppText, AppIcon, AppButton } from '../components';
+import { AppText } from '../components';
 import colors from '../config/styles/colors';
-
 import useAuth from '../Services/useAuth'
 
 const DrawerHeader = ({ navigation }) => {
