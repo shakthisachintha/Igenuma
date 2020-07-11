@@ -8,12 +8,11 @@ const AppIcon = ({ iconColor = "#fff", size = 40, name, backgroundColor = '#000'
             backgroundColor,
             width: size,
             height: size,
-            padding: 4,
             justifyContent: 'center',
             alignItems: "center",
             borderRadius: size / 2
         }}>
-            <Icon name={name} size={size / 2} color={iconColor} />
+            <Icon name={name} size={size / 1.6} color={iconColor} />
         </View>
     )
 }
