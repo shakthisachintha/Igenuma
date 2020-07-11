@@ -11,7 +11,7 @@ import AppText from '../AppText';
 
 const AppFormInput = ({ name, indicateSymbol = true, ...otherProps }) => {
 
-    const { setFieldTouched, handleChange, errors, touched } = useFormikContext();
+    const { setFieldTouched, values, setFieldValue, errors, touched } = useFormikContext();
 
     const errorSymbol = (touched, error) => {
         if (indicateSymbol) {
@@ -28,21 +28,19 @@ const AppFormInput = ({ name, indicateSymbol = true, ...otherProps }) => {
 
     return (
 
-        <>
-            <View styles={styles.container}>
-
-                <AppTextInput
-                    append={errorSymbol(touched[name], errors[name])}
-                    onBlur={() => setFieldTouched(name)}
-                    onChangeText={handleChange(name)}
-                    {...otherProps}
-                />
-                <View style={styles.errorContainer}>
-                    {touched[name] && <ErrorMessage error={errors[name]} />}
-                </View>
+        <View styles={styles.container}>
+            <AppTextInput
+                append={errorSymbol(touched[name], errors[name])}
+                onBlur={() => setFieldTouched(name)}
+                onChangeText={text => setFieldValue(name, text)}
+                value={values[name]}
+                {...otherProps}
+            />
+            <View style={styles.errorContainer}>
+                {touched[name] && <ErrorMessage error={errors[name]} />}
             </View>
+        </View>
 
-        </>
     )
 }
 

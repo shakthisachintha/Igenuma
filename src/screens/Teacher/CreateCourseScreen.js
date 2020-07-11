@@ -1,58 +1,93 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import * as Yup from 'yup';
 
+import * as courseAPI from '../../api/courses';
 
-import { AppForm, AppFormInput, SubmitButton } from '../../components/forms'
-import { AppButton, ImageInput } from '../../components';
+import { AppForm, AppFormInput, SubmitButton, AppFormImage } from '../../components/forms'
+import { ErrorHandler } from '../../components';
+import UploadScreen from '../UploadScreen';
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required().label("Course name"),
     description: Yup.string().required().min(10).label("Course description"),
-    // password: Yup.string().required().min(6).label("Password"),
-    // userType: Yup.string().required().label('User role'),
-    // confirm_password: Yup.string().required().oneOf([Yup.ref('password')], 'Passwords must match')
 });
 
 
 const CreateCourseScreen = () => {
+    const [uploadVisible, setUploadVisible] = useState(false);
+    const [indeterminate, setIndeterminate] = useState(false);
+    const [progress, setProgress] = useState(0);
 
-    const [imageURI, setImageURI] = useState(null)
 
+    const handleSubmit = async (values, { resetForm }) => {
+        setProgress(0);
+        setIndeterminate(true);
+        setUploadVisible(true);
+        try {
+            const id = await courseAPI.createCourse(values);
+            setIndeterminate(false);
+            if (values.image) {
+                const onStateChange = (progress) => {
+                    setProgress(progress);
+                }
+                const updateImageURI = async (URI) => {
+                    await courseAPI.updateCourse(id, { image: URI });
+                }
+
+                courseAPI.addCourseImage(values.image, id, onStateChange, updateImageURI)
+            } else {
+                setProgress(1);
+            }
+
+        } catch (error) {
+
+            <ErrorHandler error={error} />
+        }
+        resetForm();
+    }
 
     return (
-        <View>
-            {/* <AppButton title="Show Image" onPress={getImage} /> */}
-            <Image style={{ width: 100, height: 100 }} source={{ uri: imageURI }} />
+        <>
+            <UploadScreen onDone={() => setUploadVisible(false)} indeterminate={indeterminate} progress={progress} visible={uploadVisible} />
+            <View style={styles.container}>
 
-            <ImageInput onChangeImage={uri => setImageURI(uri)} imageURI={imageURI} />
+                <AppForm
+                    initialValues={{ name: "", description: "", image: null }}
+                    validationSchema={validationSchema}
+                    onSubmit={handleSubmit}
+                >
 
-            <AppForm
-                initialValues={{ name: "", description: "" }}
-                validationSchema={validationSchema}
-            >
+                    <AppFormImage name="image" />
+                    <AppFormInput
+                        autoCapitalize="words"
+                        autoCorrect={false}
+                        name="name"
+                        placeholder="Course name"
+                    />
+                    <AppFormInput
+                        autoCorrect={false}
+                        name="description"
+                        multiline={true}
+                        numberOfLines={3}
+                        placeholder="Course description"
+                    />
 
-                <AppFormInput
-                    autoCapitalize="words"
-                    autoCorrect={false}
-                    name="name"
-                    placeholder="Course name"
-                />
-                <AppFormInput
-                    autoCorrect={false}
-                    name="description"
-                    multiline={true}
-                    numberOfLines={3}
-                    placeholder="Course description"
-                />
+                    <SubmitButton title="Create course" />
 
-                <SubmitButton title="Create course" />
-
-            </AppForm>
-        </View>
+                </AppForm>
+            </View>
+        </>
     )
 }
 
 export default CreateCourseScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingHorizontal: 40,
+        alignItems: "center",
+        justifyContent: "center"
+    }
+})
