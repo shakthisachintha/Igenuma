@@ -13,20 +13,19 @@ export default useAuth = () => {
 
     function onAuthStateChanged(data) {
         setIsLoading(true);
-        console.log(data);
         if (data) {
             firestore().collection('users').doc(data.uid).get().then(resp => {
                 const userData = resp._data;
                 if (userData) {
+                    setIsLoading(false);
                     let userObj = _.pick(userData, ['email', 'name', 'userType', 'image']);
                     userObj.image = data.photoURL;
-                    setIsLoading(false);
                     setUser(userObj);
                 }
             }).catch(() => {
                 setIsLoading(false);
-                setUser(null);
                 alert("Unkown login error occured!");
+                setUser(null);
             })
         } else {
             setIsLoading(false);
