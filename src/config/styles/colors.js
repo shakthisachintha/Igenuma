@@ -3,5 +3,6 @@ export default colors = {
     SECONDARY: "#989eb1",
     DANGER: "#ff3333",
     SUCCESS: "#52e23e",
-    WHITE: "white"
+    WHITE: "white",
+    BLUE: "dodgerblue"
 }
