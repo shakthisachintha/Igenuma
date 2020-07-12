@@ -5,8 +5,10 @@ import * as Yup from 'yup';
 import * as courseAPI from '../../api/courses';
 
 import { AppForm, AppFormInput, SubmitButton, AppFormImage } from '../../components/forms'
-import { ErrorHandler } from '../../components';
+import { ErrorHandler, AppButton } from '../../components';
 import UploadScreen from '../UploadScreen';
+import useAuth from '../../Services/useAuth';
+import colors from '../../config/styles/colors';
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required().label("Course name"),
@@ -14,11 +16,11 @@ const validationSchema = Yup.object().shape({
 });
 
 
-const CreateCourseScreen = () => {
+const CreateCourseScreen = ({ navigation }) => {
     const [uploadVisible, setUploadVisible] = useState(false);
     const [indeterminate, setIndeterminate] = useState(false);
     const [progress, setProgress] = useState(0);
-
+    const user = useAuth().user;
 
     const handleSubmit = async (values, { resetForm }) => {
         setProgress(0);
@@ -53,7 +55,7 @@ const CreateCourseScreen = () => {
             <View style={styles.container}>
 
                 <AppForm
-                    initialValues={{ name: "", description: "", image: null }}
+                    initialValues={{ teacher: { id: user.id, name: user.name }, name: "", description: "", image: null }}
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >
@@ -76,6 +78,7 @@ const CreateCourseScreen = () => {
                     <SubmitButton title="Create course" />
 
                 </AppForm>
+                <AppButton containerStyle={{ backgroundColor: null }} btnTextStyle={{ color: colors.PRIMARY, fontSize: 14, fontWeight: "normal", fontFamily: "Asap-Regular", textTransform: 'none' }} onPress={() => navigation.navigate('ManageCourses')} title="View courses" />
             </View>
         </>
     )
