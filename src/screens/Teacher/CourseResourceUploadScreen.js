@@ -1,7 +1,9 @@
 import React from 'react'
 import { StyleSheet, ScrollView, Text, View, Image, ImageBackground } from 'react-native'
-import { AppText } from '../../components';
+import { AppText, FileInput } from '../../components';
 import colors from '../../config/styles/colors';
+import { AppForm, AppFormFile } from '../../components/forms';
+
 
 
 const CourseResourceUploadScreen = ({ navigation, route }) => {
@@ -23,7 +25,7 @@ const CourseResourceUploadScreen = ({ navigation, route }) => {
 
                     <View style={styles.formContainer}>
                         <AppForm>
-
+                            <FileInput onChangeFile={(data) => console.log(data)} />
                         </AppForm>
                     </View>
                 </View>
