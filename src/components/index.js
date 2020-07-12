@@ -6,6 +6,7 @@ export { default as AppIcon } from './AppIcon';
 export { default as AppTextInput } from './AppTextInput';
 export { default as AppModal } from './AppModal';
 export { default as AppText } from './AppText';
+export { default as Card } from './Card';
 export { default as ImageInput } from './ImageInput';
 
 export { default as ErrorHandler } from './ErrorHandler';

@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
     },
     btnText: {
         color: colors.WHITE,
-        fontWeight: 'bold',
+        fontFamily: "Asap-Regular",
+        // fontWeight: 'normal',/
         textTransform: "uppercase",
         fontSize: 18
     }
