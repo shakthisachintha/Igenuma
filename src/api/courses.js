@@ -1,3 +1,4 @@
+import React from 'react'
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import _ from 'lodash';
@@ -17,18 +18,19 @@ const addCourseImage = (sourceURI, fileName, onStateChange = null, onSuccess = n
         const url = await reference.getDownloadURL();
         onSuccess(url);
     });
-    task.catch(error => <ErrorHandler error={error} />)
+    task.catch(error => { return ErrorHandler(error); })
     return task;
 }
 
 
 const createCourse = async (values) => {
     try {
-        const result = await endpoint.add(_.pick(values, ["name", "description"]));
+        console.log(values);
+        const result = await endpoint.add(_.pick(values, ["teacher", "name", "description"]));
         const id = (await result.get()).id
         return id;
     } catch (error) {
-        return <ErrorHandler error={error} />
+        return ErrorHandler(error);
     }
 }
 
@@ -40,14 +42,37 @@ const getCourse = async (id) => {
         const meta = results.id
         return _.extend(data, { id });
     } catch (error) {
-        return <ErrorHandler error={error} />
+        return ErrorHandler(error);
+    }
+}
+const getCoursesFromTeacher = async (teacherID) => {
+    try {
+        let courses = [];
+        const result = await endpoint.where("teacher.id", "==", teacherID).get();
+        result.forEach(doc => {
+            let course = doc.data();
+            course.id = doc.id;
+            courses.push(course);
+        })
+        return courses;
+    } catch (error) {
+        return ErrorHandler(error);
     }
 }
 
 const getCourses = async () => {
-    const results = await endpoint.get();
-    if (results.empty) return null;
-    return results.docs;
+    try {
+        let courses = [];
+        const result = await endpoint.get();
+        result.forEach(doc => {
+            let course = doc.data();
+            course.id = doc.id;
+            courses.push(course);
+        })
+        return courses;
+    } catch (error) {
+        return ErrorHandler(error);
+    }
 }
 
 const updateCourse = async (docID, values) => {
@@ -56,9 +81,9 @@ const updateCourse = async (docID, values) => {
         const course = await getCourse(docID);
         return course;
     } catch (error) {
-        return <ErrorHandler error={error} />
+        return ErrorHandler(error);
     }
 }
 
 
-export { createCourse, updateCourse, addCourseImage, getCourses, getCourse };
+export { createCourse, updateCourse, addCourseImage, getCourses, getCourse, getCoursesFromTeacher };

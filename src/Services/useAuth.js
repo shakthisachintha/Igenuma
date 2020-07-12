@@ -20,6 +20,7 @@ export default useAuth = () => {
                     setIsLoading(false);
                     let userObj = _.pick(userData, ['email', 'name', 'userType', 'image']);
                     userObj.image = data.photoURL;
+                    userObj.id = data.uid;
                     setUser(userObj);
                 }
             }).catch(() => {
