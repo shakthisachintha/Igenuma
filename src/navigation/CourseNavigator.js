@@ -1,11 +1,9 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack"
 import { DrawerActions } from '@react-navigation/native';
-// import { NavigationContext } from '@react-navigation/native';
-// import { useNavigation } from '@react-navigation/native'
-// import { DrawerActions } from 'react-navigation'
 
-import { CourseResourceUploadScreen, ManageCoursesScreen } from '../screens/Teacher/';
+
+import { CourseResourceUploadScreen, ManageCoursesScreen, CourseEditScreen, CourseOverviewScreen } from '../screens/Teacher/';
 import { AppIcon } from '../components';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
@@ -35,18 +33,22 @@ const CourseNavigator = () => (
         />
 
         <Stack.Screen
+            name="CourseOverview"
+            component={CourseOverviewScreen}
+            options={({ route }) => ({ title: route.params.course.name })}
+        />
+
+        <Stack.Screen
             name="UploadCourseResources"
             component={CourseResourceUploadScreen}
             options={({ route }) => ({ title: route.params.course.name })}
         />
 
-        {/* <Stack.Screen
-            name="Register"
-            component={RegisterScreen}
-            options={{
-                headerShown: false,
-            }}
-        /> */}
+        <Stack.Screen
+            name="EditCourse"
+            component={CourseEditScreen}
+            options={({ route }) => ({ title: route.params.course.name })}
+        />
 
     </Stack.Navigator>
 )
