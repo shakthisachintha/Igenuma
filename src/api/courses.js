@@ -13,7 +13,7 @@ const addCourseImage = (sourceURI, fileName, onStateChange = null, onSuccess = n
 
 const createCourse = async (values) => {
     try {
-        const result = await endpoint.add(_.pick(values, ["teacher", "name", "description"]));
+        const result = await endpoint.add({ ..._.pick(values, ["teacher", "name", "description"]), created_at: firestore.Timestamp.now() });
         const id = (await result.get()).id
         return id;
     } catch (error) {

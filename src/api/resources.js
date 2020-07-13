@@ -6,7 +6,9 @@ import { ErrorHandler } from '../components';
 const endpoint = firestore().collection('resources')
 const resourceFolder = "/Resources/Course/";
 
-
+const getResources = async (courseID) => {
+    endpoint.where('course', '==', courseID).orderBy
+}
 
 const uploadResource = async (resource, onStateChange = null, onSuccess = null) => {
     try {
@@ -19,7 +21,8 @@ const uploadResource = async (resource, onStateChange = null, onSuccess = null) 
                 title: resource.title,
                 description: resource.description,
                 fileName: fileName,
-                url: downloadURL
+                url: downloadURL,
+                created_at: firestore.Timestamp.now()
             });
             if (onSuccess) onSuccess(downloadURL);
         }
