@@ -1,3 +1,5 @@
 export { default as CreateCourseScreen } from './CreateCourseScreen'
 export { default as ManageCoursesScreen } from './ManageCoursesScreen'
+export { default as CourseOverviewScreen } from './CourseOverviewScreen'
+export { default as CourseEditScreen } from './CourseEditScreen'
 export { default as CourseResourceUploadScreen } from './CourseResourceUploadScreen'

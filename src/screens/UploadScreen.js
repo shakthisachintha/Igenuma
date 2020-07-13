@@ -6,13 +6,13 @@ import LottieView from 'lottie-react-native';
 
 import { AppText } from '../components'
 
-const UploadScreen = ({ onDone, indeterminate = false, progress = 0, visible = false }) => {
+const UploadScreen = ({ onDone, indeterminate = false, text, progress = 0, visible = false }) => {
     return (
         <Modal visible={visible}>
             <View style={styles.container}>
                 {
                     progress < 1 ?
-                        (<View><Progress.Circle indeterminate={indeterminate} color="black" strokeCap="round" thickness={3} size={100} showsText={true} progress={progress} /><AppText style={{ marginTop: 20 }}>Creating course...</AppText></View>)
+                        (<View><Progress.Circle indeterminate={indeterminate} color="black" strokeCap="round" thickness={3} size={100} showsText={true} progress={progress} /><AppText style={{ marginTop: 20 }}>{text}</AppText></View>)
                         :
                         (<LottieView onAnimationFinish={onDone} autoPlay={true} hardwareAccelerationAndroid={true} loop={false} source={require('../assets/animations/done.json')} />)
                 }

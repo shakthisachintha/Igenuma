@@ -44,14 +44,14 @@ const CreateCourseScreen = ({ navigation }) => {
 
         } catch (error) {
 
-            <ErrorHandler error={error} />
+            ErrorHandler(error)
         }
         resetForm();
     }
 
     return (
         <>
-            <UploadScreen onDone={() => setUploadVisible(false)} indeterminate={indeterminate} progress={progress} visible={uploadVisible} />
+            <UploadScreen onDone={() => setUploadVisible(false)} text="Creating course..." indeterminate={indeterminate} progress={progress} visible={uploadVisible} />
             <View style={styles.container}>
 
                 <AppForm

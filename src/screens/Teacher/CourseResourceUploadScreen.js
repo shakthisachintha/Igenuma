@@ -1,108 +1,106 @@
 import React, { useState } from 'react'
-import { StyleSheet, ScrollView, RefreshControl, View, Image, ImageBackground } from 'react-native'
 import * as Yup from 'yup';
+import { StyleSheet, View } from 'react-native'
+import { CommonActions } from '@react-navigation/native';
 
-import { AppText, FileInput } from '../../components';
-import colors from '../../config/styles/colors';
 import { AppForm, AppFormFile, AppFormInput, SubmitButton } from '../../components/forms';
+import { AppText, ErrorHandler } from '../../components';
+import UploadScreen from '../UploadScreen';
+import { uploadResource } from '../../api/resources';
 
 
+const validationSchema = Yup.object().shape({
+    course: Yup.string().required(),
+    title: Yup.string().required().label("Resource title"),
+    description: Yup.string().min(10).label("Resource description"),
+    file: Yup.object().shape({
+        uri: Yup.string().required('Resource file is required').nullable(),
+        fileName: Yup.string().required('Resource file is required').nullable(),
+    })
+});
 
 const CourseResourceUploadScreen = ({ navigation, route }) => {
     const course = route.params.course;
-    const [isRefreshing, setIsRefreshing] = useState(false)
 
-    const getCourseResources = () => {
 
+    const [uploadVisible, setUploadVisible] = useState(false);
+    const [indeterminate, setIndeterminate] = useState(false);
+    const [progress, setProgress] = useState(0);
+
+    const onStateChange = (progress) => {
+        setProgress(progress);
     }
 
+    const onDone = (uri) => {
+        setUploadVisible(false);
+        navigation.dispatch(CommonActions.goBack());
+    }
 
-    const validationSchema = Yup.object().shape({
-        course: Yup.string().required(),
-        title: Yup.string().required().label("Resource title"),
-        description: Yup.string().min(10).label("Resource description"),
-        file: Yup.object().shape({
-            uri: Yup.string().required('Resource file is required').nullable(),
-            fileName: Yup.string().required('Resource file is required').nullable(),
-        })
-    });
+    const handleSubmit = async (values, { resetForm }) => {
+        setProgress(0);
+        setUploadVisible(true);
+        try {
+            console.log(values);
+            uploadResource(values, onStateChange);
+        } catch (error) {
+            setUploadVisible(false);
+            ErrorHandler(error)
+        }
+        resetForm();
+    }
 
     return (
-        <ScrollView refreshControl={<RefreshControl progressBackgroundColor="black" colors={[colors.WHITE, colors.DANGER, colors.SUCCESS]} refreshing={isRefreshing} onRefresh={getCourseResources} />}>
-            <View>
-                <View>
-                    <ImageBackground source={{ uri: course.image }} blurRadius={4} style={styles.coverImage} >
+        <>
+            <UploadScreen onDone={onDone} text="Uploading resource..." indeterminate={indeterminate} progress={progress} visible={uploadVisible} />
+            <View style={styles.container}>
+                <View style={styles.formContainer}>
+                    <AppText style={styles.h1}>Upload Resource</AppText>
+                    <AppForm
+                        initialValues={{ course: course.id, file: { fileName: null, uri: "" }, title: "", description: "" }}
+                        validationSchema={validationSchema}
+                        onSubmit={handleSubmit}
+                    >
 
-                    </ImageBackground>
+                        <AppFormInput
+                            autoCapitalize="words"
+                            autoCorrect={false}
+                            name="title"
+                            placeholder="Resource title"
+                        />
+                        <AppFormInput
+                            autoCorrect={false}
+                            name="description"
+                            indicateSymbol={false}
+                            multiline={true}
+                            numberOfLines={3}
+                            placeholder="Resource description"
+                        />
+                        <AppFormFile name="file" />
+                        <SubmitButton title="Upload resource" />
+                    </AppForm>
                 </View>
-                <View style={styles.container}>
-                    <AppText style={styles.cardTitle}>{course.name}</AppText>
-                    <AppText style={styles.description}>{course.description}</AppText>
-                    <AppText style={styles.teacher}>{course.teacher.name}</AppText>
-
-                    <View style={styles.formContainer}>
-                        <AppForm
-                            initialValues={{ course: course.id, file: { fileName: null, uri: "" }, title: "", description: "" }}
-                            validationSchema={validationSchema}
-                            onSubmit={(values) => console.log(values)}
-                        >
-
-                            <AppFormInput
-                                autoCapitalize="words"
-                                autoCorrect={false}
-                                name="title"
-                                placeholder="Resource title"
-                            />
-                            <AppFormInput
-                                autoCorrect={false}
-                                name="description"
-                                indicateSymbol={false}
-                                multiline={true}
-                                numberOfLines={3}
-                                placeholder="Resource description"
-                            />
-                            <AppFormFile name="file" />
-                            <SubmitButton title="Upload resource" />
-                        </AppForm>
-                    </View>
-                </View>
-
-
-
-
             </View>
+        </>
 
-        </ScrollView>
     )
 }
 
 export default CourseResourceUploadScreen
 
 const styles = StyleSheet.create({
-    coverImage: {
-        width: "100%",
-        aspectRatio: 16 / 9,
-    },
-
-    cardTitle: {
-        fontFamily: "Asap-SemiBold",
-        fontSize: 26,
-        color: colors.black
-    },
-    teacher: {
-        fontSize: 14,
-        fontWeight: "normal",
-        fontFamily: "Asap-Medium",
-        marginTop: 3,
-        color: colors.BLUE
-    },
     container: {
-        padding: 10
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
     },
-    description: {
-        fontSize: 16,
-        fontFamily: "Asap-Regular",
-        marginTop: 10,
-        color: colors.PRIMARY
+    formContainer: {
+        paddingHorizontal: 30,
+        width: "100%"
+    },
+    h1: {
+        fontFamily: "Asap-SemiBold",
+        fontSize: 38,
+        alignSelf: "flex-start",
+        marginBottom: 20
     },
 })
