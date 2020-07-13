@@ -44,7 +44,7 @@ const ManageCoursesScreen = ({ navigation }) => {
                     <RefreshControl progressBackgroundColor="black" colors={[colors.WHITE, colors.DANGER, colors.SUCCESS]} refreshing={isRefreshing} onRefresh={getCourses} />
                 }
                 data={courses}
-                renderItem={({ item }) => <Card onPress={() => navigation.navigate('CourseOverview', { course: item })} title={item.name} subTitle="Shakthi Sachintha" description={item.description} />}
+                renderItem={({ item }) => <Card onPress={() => navigation.navigate('CourseOverview', { course: item })} title={item.name} subTitle={item.teacher.name} description={item.description} />}
                 keyExtractor={item => item.id}
             />
         </View>

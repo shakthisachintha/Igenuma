@@ -9,8 +9,6 @@ import AuthContext from './auth/context';
 
 
 
-
-
 const App = () => {
 
   const [user, setUser] = useState(null);

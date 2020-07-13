@@ -1,6 +1,5 @@
 import storage from '@react-native-firebase/storage';
 import RNFetchBlob from 'rn-fetch-blob'
-import { Platform } from 'react-native';
 
 import { ErrorHandler } from '../components';
 
@@ -20,6 +19,15 @@ const uploader = (folder, sourceURI, fileName, onStateChange = null, onSuccess =
     return task;
 }
 
+const deleteFile = async (path) => {
+    try {
+        await storage().ref(path).delete();
+    } catch (error) {
+        ErrorHandler(error);
+    }
+
+}
+
 const getPathForFirebaseStorage = async (uri) => {
     try {
         const file = await RNFetchBlob.fs.stat(uri);
@@ -29,4 +37,4 @@ const getPathForFirebaseStorage = async (uri) => {
     }
 }
 
-export { uploader, getPathForFirebaseStorage };
+export { uploader, deleteFile, getPathForFirebaseStorage };

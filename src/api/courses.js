@@ -36,7 +36,7 @@ const getCourse = async (id) => {
 const getCoursesFromTeacher = async (teacherID) => {
     try {
         let courses = [];
-        const result = await endpoint.where("teacher.id", "==", teacherID).get();
+        const result = await endpoint.where("teacher.id", "==", teacherID).orderBy('created_at', 'desc').get();
         result.forEach(doc => {
             let course = doc.data();
             course.id = doc.id;

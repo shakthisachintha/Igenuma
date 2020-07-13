@@ -22,7 +22,7 @@ const headerLeft = (navigation) => {
 
 const CourseNavigator = () => (
 
-    <Stack.Navigator screenOptions={({ navigation, route }) => ({ headerLeft: () => headerLeft(navigation), headerTransparent: false, headerStyle: { backgroundColor: "white" }, headerTitleStyle: { fontFamily: "Asap-Regular", alignSelf: "flex-end" }, gestureEnabled: true, headerTintColor: "black", gestureDirection: "horizontal", gestureVelocityImpact: 0.5 })} >
+    <Stack.Navigator screenOptions={({ navigation, route }) => ({ headerLeft: () => headerLeft(navigation), headerTransparent: false, headerStyle: { backgroundColor: "white" }, headerTitleStyle: { fontFamily: "Asap-Regular", alignSelf: "flex-end" }, gestureEnabled: true, headerTintColor: "black" })} >
 
         <Stack.Screen
             name="ManageCourses"

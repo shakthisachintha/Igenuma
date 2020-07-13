@@ -1,13 +1,34 @@
 import firestore from '@react-native-firebase/firestore';
-
-import { uploader, getPathForFirebaseStorage } from './storage';
+import _ from 'lodash';
+import { uploader, getPathForFirebaseStorage, deleteFile } from './storage';
 import { ErrorHandler } from '../components';
 
 const endpoint = firestore().collection('resources')
 const resourceFolder = "/Resources/Course/";
 
 const getResources = async (courseID) => {
-    endpoint.where('course', '==', courseID).orderBy
+    try {
+        let resources = [];
+        const result = await endpoint.where('course', '==', courseID).orderBy('created_at', 'desc').get();
+        result.forEach(doc => {
+            resources.push({ ...doc.data(), id: doc.id });
+        })
+        console.log(resources);
+        return resources;
+    } catch (error) {
+        ErrorHandler(error)
+    }
+
+}
+
+const deleteResource = async (resourceID, fileName) => {
+    try {
+        await endpoint.doc(resourceID).delete();
+        await deleteFile(`${resourceFolder}${fileName}`);
+    } catch (error) {
+        ErrorHandler(error);
+    }
+
 }
 
 const uploadResource = async (resource, onStateChange = null, onSuccess = null) => {
@@ -35,4 +56,4 @@ const uploadResource = async (resource, onStateChange = null, onSuccess = null) 
 
 
 
-export { uploadResource };
+export { uploadResource, getResources, deleteResource };
