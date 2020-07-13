@@ -1,31 +1,18 @@
-import React from 'react'
-import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import _ from 'lodash';
+
 import { ErrorHandler } from '../components';
+import { uploader } from './storage';
 
 const endpoint = firestore().collection('courses')
 const imageFolder = "/Images/Course/";
 
 const addCourseImage = (sourceURI, fileName, onStateChange = null, onSuccess = null) => {
-    const reference = storage().ref(`${imageFolder}${fileName}`);
-    const task = reference.putFile(sourceURI);
-    task.on('state_changed', snapShot => {
-        let progress = snapShot.bytesTransferred / snapShot.totalBytes;
-        onStateChange(progress);
-    });
-    task.then(async () => {
-        const url = await reference.getDownloadURL();
-        onSuccess(url);
-    });
-    task.catch(error => { return ErrorHandler(error); })
-    return task;
+    uploader(imageFolder, sourceURI, fileName, onStateChange, onSuccess)
 }
-
 
 const createCourse = async (values) => {
     try {
-        console.log(values);
         const result = await endpoint.add(_.pick(values, ["teacher", "name", "description"]));
         const id = (await result.get()).id
         return id;
@@ -45,6 +32,7 @@ const getCourse = async (id) => {
         return ErrorHandler(error);
     }
 }
+
 const getCoursesFromTeacher = async (teacherID) => {
     try {
         let courses = [];
