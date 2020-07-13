@@ -1,42 +1,46 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { StyleSheet, Text, Alert, TouchableOpacity } from 'react-native'
 import DocumentPicker from 'react-native-document-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import colors from '../config/styles/colors';
+import ErrorHandler from './ErrorHandler';
 
-const FileInput = ({ onChangeFile }) => {
-
-    const [file, setFile] = useState(false)
+const FileInput = ({ onChangeFile, fileName, fileURI }) => {
 
     const pickFile = async () => {
         try {
             const res = await DocumentPicker.pick();
-            onChangeFile(res);
-            setFile(res);
+            await onChangeFile(res.uri, res.name);
         } catch (error) {
             console.log(error);
         }
     }
 
-    const handlePress = async () => {
-        if (!file) pickFile();
-        else {
-            Alert.alert("Delete", "Are you sure you want to delete file?", [
-                {
-                    text: "Yes",
-                    onPress: () => { onChangeFile(null); setFile(false) }
-                }, {
-                    text: "No"
-                }
-            ])
+    const handlePress = () => {
+
+        try {
+            if (!fileURI) pickFile();
+            else {
+                Alert.alert("Delete", "Are you sure you want to delete file?", [
+                    {
+                        text: "Yes",
+                        onPress: () => { onChangeFile(null, null); }
+                    }, {
+                        text: "No"
+                    }
+                ])
+            }
+        } catch (error) {
+            ErrorHandler(error)
         }
+
     }
 
     return (
         <TouchableOpacity activeOpacity={0.85} style={styles.button} onPress={handlePress}>
             <Icon color="white" name="file" size={18} />
-            <Text style={styles.btnText}>{!file ? "Pick a file" : file.name}</Text>
+            <Text style={styles.btnText}>{!fileName ? "Pick a file" : fileName}</Text>
         </TouchableOpacity>
     )
 }

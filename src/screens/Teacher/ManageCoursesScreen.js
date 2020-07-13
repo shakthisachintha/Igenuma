@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, FlatList, RefreshControl, ScrollView } from 'react-native'
 
 import * as courseAPI from '../../api/courses';
-import { AppIcon, AppText, AppButton, Card } from '../../components';
+import { AppText, AppButton, Card } from '../../components';
 import colors from '../../config/styles/colors';
 import useAuth from '../../Services/useAuth';
 

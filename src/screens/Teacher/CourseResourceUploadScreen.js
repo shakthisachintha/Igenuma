@@ -1,17 +1,34 @@
-import React from 'react'
-import { StyleSheet, ScrollView, Text, View, Image, ImageBackground } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, ScrollView, RefreshControl, View, Image, ImageBackground } from 'react-native'
+import * as Yup from 'yup';
+
 import { AppText, FileInput } from '../../components';
 import colors from '../../config/styles/colors';
-import { AppForm, AppFormFile } from '../../components/forms';
+import { AppForm, AppFormFile, AppFormInput, SubmitButton } from '../../components/forms';
 
 
 
 const CourseResourceUploadScreen = ({ navigation, route }) => {
     const course = route.params.course;
+    const [isRefreshing, setIsRefreshing] = useState(false)
 
+    const getCourseResources = () => {
+
+    }
+
+
+    const validationSchema = Yup.object().shape({
+        course: Yup.string().required(),
+        title: Yup.string().required().label("Resource title"),
+        description: Yup.string().min(10).label("Resource description"),
+        file: Yup.object().shape({
+            uri: Yup.string().required('Resource file is required').nullable(),
+            fileName: Yup.string().required('Resource file is required').nullable(),
+        })
+    });
 
     return (
-        <ScrollView>
+        <ScrollView refreshControl={<RefreshControl progressBackgroundColor="black" colors={[colors.WHITE, colors.DANGER, colors.SUCCESS]} refreshing={isRefreshing} onRefresh={getCourseResources} />}>
             <View>
                 <View>
                     <ImageBackground source={{ uri: course.image }} blurRadius={4} style={styles.coverImage} >
@@ -21,11 +38,31 @@ const CourseResourceUploadScreen = ({ navigation, route }) => {
                 <View style={styles.container}>
                     <AppText style={styles.cardTitle}>{course.name}</AppText>
                     <AppText style={styles.description}>{course.description}</AppText>
-                    {/* <AppText style={styles.teacher}>{course.teacher.name}</AppText> */}
+                    <AppText style={styles.teacher}>{course.teacher.name}</AppText>
 
                     <View style={styles.formContainer}>
-                        <AppForm>
-                            <FileInput onChangeFile={(data) => console.log(data)} />
+                        <AppForm
+                            initialValues={{ course: course.id, file: { fileName: null, uri: "" }, title: "", description: "" }}
+                            validationSchema={validationSchema}
+                            onSubmit={(values) => console.log(values)}
+                        >
+
+                            <AppFormInput
+                                autoCapitalize="words"
+                                autoCorrect={false}
+                                name="title"
+                                placeholder="Resource title"
+                            />
+                            <AppFormInput
+                                autoCorrect={false}
+                                name="description"
+                                indicateSymbol={false}
+                                multiline={true}
+                                numberOfLines={3}
+                                placeholder="Resource description"
+                            />
+                            <AppFormFile name="file" />
+                            <SubmitButton title="Upload resource" />
                         </AppForm>
                     </View>
                 </View>

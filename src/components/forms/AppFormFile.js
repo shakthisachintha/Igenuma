@@ -8,18 +8,18 @@ import FileInput from '../FileInput';
 
 const AppFormFile = ({ name }) => {
 
-    const { setFieldTouched, setFieldValue, errors, touched } = useFormikContext();
+    const { setFieldTouched, setFieldValue, errors, touched, values } = useFormikContext();
 
-    const handleChange = (res) => {
-        setFieldValue(name, res.uri);
+    const handleChange = async (uri, fileName) => {
         setFieldTouched(name, true);
+        setFieldValue(name, { uri: uri, fileName: fileName });
     }
 
     return (
         <View>
-            <FileInput onChangeFile={handleChange} />
+            <FileInput fileURI={values[name].uri} fileName={values[name].fileName} onChangeFile={handleChange} />
             <View style={styles.errorContainer}>
-                {touched[name] && <ErrorMessage error={errors[name]} />}
+                {touched[name] && <ErrorMessage error={errors[name] ? errors[name].fileName : null} />}
             </View>
         </View>
     )
@@ -27,4 +27,8 @@ const AppFormFile = ({ name }) => {
 
 export default AppFormFile
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    errorContainer: {
+        marginLeft: 10
+    }
+})
