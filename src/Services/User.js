@@ -16,4 +16,8 @@ const registerUser = ({ name, email, password, userType }, actions) => {
     })
 }
 
+const changeProfilePicture = () => {
+
+}
+
 export default { registerUser };

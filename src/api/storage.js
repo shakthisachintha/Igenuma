@@ -25,7 +25,6 @@ const deleteFile = async (path) => {
     } catch (error) {
         ErrorHandler(error);
     }
-
 }
 
 const getPathForFirebaseStorage = async (uri) => {

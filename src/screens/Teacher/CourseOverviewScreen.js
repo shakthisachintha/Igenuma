@@ -5,7 +5,6 @@ import { AppText, AppButton, Card, AppIcon, ErrorHandler } from '../../component
 import colors from '../../config/styles/colors';
 import { getResources, deleteResource } from '../../api/resources';
 
-import Swipeable from 'react-native-gesture-handler/Swipeable';
 import ResourceCard from '../../components/ResourceCard';
 
 

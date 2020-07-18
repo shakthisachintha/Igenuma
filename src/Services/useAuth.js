@@ -1,10 +1,12 @@
-import firestore from '@react-native-firebase/firestore';
+import firestore, { firebase } from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 import { Alert } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../auth/context';
 import _ from 'lodash';
+import { ErrorHandler } from '../components';
+import { uploader } from '../api/storage';
 // import React from 'react'
 
 export default useAuth = () => {
@@ -98,8 +100,25 @@ export default useAuth = () => {
             })
     }
 
+    const updatePhoto = async (uri, fileName, onSuccess = null) => {
+        try {
+            const successFunction = async (URL) => {
+                const userData = {
+                    photoURL: URL,
+                };
+                const result = await firebase.auth().currentUser.updateProfile(userData);
+                onSuccess(URL);
+                setUser({ ...user, image: URL });
 
-    return { user, setUser, registerUser, loginUser, logOutUser, isLoading }
+            }
+            uploader('Images/User/', uri, fileName, null, successFunction);
+        } catch (error) {
+            ErrorHandler(error);
+        }
+    }
+
+
+    return { user, setUser, registerUser, loginUser, logOutUser, isLoading, updatePhoto }
 
 
 }

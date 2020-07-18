@@ -1,27 +1,26 @@
 import React from 'react'
-import { Image, StyleSheet, TouchableWithoutFeedback, View, Button } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 
 
-import images from '../config/images';
-import { AppText } from '../components';
+
+import { AppText, ProfilePicture } from '../components';
 import colors from '../config/styles/colors';
 import useAuth from '../Services/useAuth'
 
+
 const DrawerHeader = ({ navigation }) => {
+
     const auth = useAuth();
     return (
         <View style={styles.header}>
-            <View style={styles.imageContainer}>
-                <Image style={styles.image} source={images.TEACHER_IMAGE} />
-            </View>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('Dashboard')}>
+            <ProfilePicture user={auth.user} />
+            <TouchableWithoutFeedback>
                 <View>
                     <AppText style={styles.h2}>{auth.user.name}</AppText>
                     <AppText style={styles.muted}>{auth.user.email}</AppText>
                     <AppText style={styles.userType}>{auth.user.userType}</AppText>
                 </View>
             </TouchableWithoutFeedback>
-
         </View>
     )
 }
@@ -37,17 +36,6 @@ const styles = StyleSheet.create({
     },
     header: {
         marginBottom: 35,
-    },
-
-    image: {
-        width: 100,
-        alignSelf: 'center',
-        height: 100,
-        borderRadius: 50,
-
-    },
-    imageContainer: {
-        marginBottom: 15,
     },
     muted: {
         marginTop: 1,
