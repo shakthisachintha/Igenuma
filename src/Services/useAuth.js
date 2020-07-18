@@ -2,12 +2,12 @@ import firestore, { firebase } from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 import { Alert } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import AuthContext from '../auth/context';
 import _ from 'lodash';
 import { ErrorHandler } from '../components';
 import { uploader } from '../api/storage';
-// import React from 'react'
+
 
 export default useAuth = () => {
     const { user, setUser } = useContext(AuthContext);
@@ -39,7 +39,37 @@ export default useAuth = () => {
     useEffect(() => {
         const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
         return subscriber; // unsubscribe on unmount
-    }, [])
+    }, []);
+
+
+    const changePassword = async (currentPassword, newPassword) => {
+        try {
+            const provider = firebase.auth.EmailAuthProvider
+            const authCredential = provider.credential(user.email, currentPassword);
+            const result = await firebase.auth().currentUser.reauthenticateWithCredential(authCredential)
+            if (result.user) {
+                await auth().currentUser.updatePassword(newPassword);
+                alert("Password successfully changed!");
+            };
+        } catch (error) {
+            if (error.code == 'auth/wrong-password') return alert("Current password is incorrect.");
+            if (error.code == 'auth/weak-password') return alert("New password is not strong enough");
+            else {
+                ErrorHandler(error);
+            }
+        }
+    }
+
+    const updateUser = async (data) => {
+        try {
+            const result = await firestore().collection("users").doc(user.id).update({
+                name: data.name
+            })
+            setUser({ ...user, ...data });
+        } catch (error) {
+            ErrorHandler(error);
+        }
+    }
 
     const loginUser = async ({ email, password }) => {
         setIsLoading(true);
@@ -118,7 +148,7 @@ export default useAuth = () => {
     }
 
 
-    return { user, setUser, registerUser, loginUser, logOutUser, isLoading, updatePhoto }
+    return { changePassword, user, setUser, registerUser, loginUser, logOutUser, isLoading, updatePhoto, updateUser }
 
 
 }

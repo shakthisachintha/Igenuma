@@ -1,27 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 
 
 
-import { AppText, ProfilePicture } from '../components';
+import { AppText, ProfilePicture, AppButton, AppTextInput, PressableIcon } from '../components';
 import colors from '../config/styles/colors';
 import useAuth from '../Services/useAuth'
+import { EditProfileScreen } from '../screens';
 
 
 const DrawerHeader = ({ navigation }) => {
-
     const auth = useAuth();
+    const [modalVisible, setModalVisible] = useState(false)
     return (
-        <View style={styles.header}>
-            <ProfilePicture user={auth.user} />
-            <TouchableWithoutFeedback>
-                <View>
-                    <AppText style={styles.h2}>{auth.user.name}</AppText>
-                    <AppText style={styles.muted}>{auth.user.email}</AppText>
-                    <AppText style={styles.userType}>{auth.user.userType}</AppText>
-                </View>
-            </TouchableWithoutFeedback>
-        </View>
+        <>
+            <EditProfileScreen setModalVisible={setModalVisible} isVisible={modalVisible} />
+            <View style={styles.header}>
+                <ProfilePicture user={auth.user} />
+                <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
+                    <View>
+                        <AppText style={styles.h2}>{auth.user.name}</AppText>
+                        <AppText style={styles.muted}>{auth.user.email}</AppText>
+                        <AppText style={styles.userType}>{auth.user.userType}</AppText>
+                    </View>
+                </TouchableWithoutFeedback>
+            </View>
+        </>
     )
 }
 

@@ -9,6 +9,7 @@ export { default as AppText } from './AppText';
 export { default as Card } from './Card';
 export { default as FileInput } from './FileInput';
 export { default as ImageInput } from './ImageInput';
+export { default as PressableIcon } from './PressableIcon';
 export { default as ProfilePicture } from './ProfilePicture';
 
 export { default as ErrorHandler } from './ErrorHandler';
