@@ -6,6 +6,7 @@ import AuthNavigator from './navigation/AuthNavigator';
 
 import DashboardNavigator from './navigation/DashboardNavigator';
 import AuthContext from './auth/context';
+import { OfflineNotice } from './components';
 
 
 
@@ -14,12 +15,15 @@ const App = () => {
   const [user, setUser] = useState(null);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
-      <NavigationContainer>
-        {user ? <DashboardNavigator /> : <AuthNavigator />}
+    <>
+      <OfflineNotice />
+      <AuthContext.Provider value={{ user, setUser }}>
+        <NavigationContainer>
+          {user ? <DashboardNavigator /> : <AuthNavigator />}
 
-      </NavigationContainer>
-    </AuthContext.Provider>
+        </NavigationContainer>
+      </AuthContext.Provider>
+    </>
   );
 };
 
