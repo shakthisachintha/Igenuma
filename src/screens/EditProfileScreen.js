@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Modal, ScrollView } from 'react-native'
 import * as Yup from 'yup';
 
 
-import { AppText, ProfilePicture, PressableIcon } from '../components';
+import { AppText, ProfilePicture, PressableIcon, AppButton } from '../components';
 import { AppForm, AppFormInput, SubmitButton } from '../components/forms';
 import useAuth from '../Services/useAuth';
 import colors from '../config/styles/colors';
@@ -114,7 +114,7 @@ const EditProfileScreen = ({ isVisible = false, setModalVisible }) => {
 
                     </AppForm>
                 </View>
-
+                <AppButton title="Logout" onPress={() => auth.logOutUser()} />
             </ScrollView>
         </Modal>
     )
@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     modalUpdateName: {
-        padding: 15
+        padding: 15,
+        marginBottom: 15
     },
 })

@@ -3,7 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import AuthNavigator from './navigation/AuthNavigator';
 
-import DashboardNavigator from './navigation/DashboardNavigator';
+import TeacherDashboard from './navigation/Teacher/DashboardNavigator';
+import StudentDashboard from './navigation/Student/DashboardNavigator';
 import AuthContext from './auth/context';
 import { OfflineNotice } from './components';
 
@@ -16,8 +17,7 @@ const App = () => {
       <OfflineNotice />
       <AuthContext.Provider value={{ user, setUser }}>
         <NavigationContainer>
-          {user ? <DashboardNavigator /> : <AuthNavigator />}
-
+          {user ? user.userType == "teacher" ? <TeacherDashboard /> : <StudentDashboard /> : <AuthNavigator />}
         </NavigationContainer>
       </AuthContext.Provider>
     </>
