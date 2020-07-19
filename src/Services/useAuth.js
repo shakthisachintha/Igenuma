@@ -11,7 +11,7 @@ import { uploader } from '../api/storage';
 
 export default useAuth = () => {
     const { user, setUser } = useContext(AuthContext);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     function onAuthStateChanged(data) {
         setIsLoading(true);
@@ -19,7 +19,7 @@ export default useAuth = () => {
             firestore().collection('users').doc(data.uid).get().then(resp => {
                 const userData = resp._data;
                 if (userData) {
-                    setIsLoading(false);
+                    // setIsLoading(false);
                     let userObj = _.pick(userData, ['email', 'name', 'userType', 'image']);
                     userObj.image = data.photoURL;
                     userObj.id = data.uid;
@@ -76,7 +76,6 @@ export default useAuth = () => {
         try {
             await auth().signInWithEmailAndPassword(email, password);
         } catch (error) {
-            console.log(error)
             setIsLoading(false);
             if (error.code == 'auth/invalid-email') return alert("Invalid Email address or password");
             if (error.code == 'auth/user-not-found') return alert("There is no user corresponding to the email address.");
@@ -87,14 +86,11 @@ export default useAuth = () => {
 
 
     const logOutUser = async () => {
-        setIsLoading(true);
         try {
             await auth().signOut();
-            setIsLoading(false);
             setUser(null);
         } catch (error) {
             alert("Error occured on logout");
-            setIsLoading(false);
         }
     }
 
@@ -108,8 +104,8 @@ export default useAuth = () => {
                     onAuthStateChanged(response.user);
                 })
                     .catch(error => {
-                        alert("Sorry unkown error occured");
                         setIsLoading(false);
+                        alert("Sorry unkown error occured");
                     })
             })
             .catch(error => {
@@ -147,8 +143,6 @@ export default useAuth = () => {
         }
     }
 
-
     return { changePassword, user, setUser, registerUser, loginUser, logOutUser, isLoading, updatePhoto, updateUser }
-
 
 }
