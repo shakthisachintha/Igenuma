@@ -20,7 +20,7 @@ const ResourceCard = ({ resourceTitle, createdAt, leftAction, resourceDesc, cour
 
         <TouchableWithoutFeedback onPress={() => openLink(fileURI)}>
             <View style={styles.container}>
-                <Swipeable overshootFriction={9} friction={4} containerStyle={styles.swipeContainer} renderRightActions={rightAction} >
+                <Swipeable overshootFriction={9} enabled={rightAction ? true : false} friction={4} containerStyle={styles.swipeContainer} renderRightActions={rightAction} >
                     <View style={styles.cardBody}>
                         {courseName && <AppText style={styles.cardTitle}>{courseName}</AppText>}
                         {resourceTitle && <AppText style={styles.cardSubTitle}>{resourceTitle}</AppText>}

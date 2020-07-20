@@ -10,7 +10,8 @@ import { AppIcon } from '../../components';
 import colors from '../../config/styles/colors';
 import DashboardScreen from '../../screens/DashboardScreen';
 import DrawerHeader from '../DrawerHeader';
-import { MyCoursesScreen, CoursesScreen } from '../../screens/Student';
+import { MyCoursesScreen } from '../../screens/Student';
+import CourseNavigator from './CourseNavigator';
 
 
 const Drawer = createDrawerNavigator();
@@ -20,7 +21,7 @@ const DashboardNavigator = () => (
 
         <Drawer.Screen options={{ drawerLabel: "Home", drawerIcon: ({ size, color }) => <AppIcon name="home" size={size + 5} iconColor={color} backgroundColor="white" /> }} name="Dashboard" component={DashboardScreen} />
 
-        <Drawer.Screen options={{ drawerLabel: "Courses", drawerIcon: ({ size, color }) => <AppIcon name="book-search" size={size + 5} iconColor={color} backgroundColor="white" /> }} name="Courses" component={CoursesScreen} />
+        <Drawer.Screen options={{ drawerLabel: "Courses", drawerIcon: ({ size, color }) => <AppIcon name="book-search" size={size + 5} iconColor={color} backgroundColor="white" /> }} name="Courses" component={CourseNavigator} />
 
         <Drawer.Screen options={{ drawerLabel: "Enrolled Courses", drawerIcon: ({ size, color }) => <AppIcon name="book-open-page-variant" size={size + 5} iconColor={color} backgroundColor="white" /> }} name="MyCourses" component={MyCoursesScreen} />
 

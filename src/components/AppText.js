@@ -2,9 +2,9 @@ import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 
 
-const AppText = ({ children, style }) => {
+const AppText = ({ children, style, ...otherProps }) => {
     return (
-        <Text style={[styles.text, style]}>{children}</Text>
+        <Text {...otherProps} style={[styles.text, style]}>{children}</Text>
     )
 }
 

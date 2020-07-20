@@ -13,7 +13,6 @@ const getResources = async (courseID) => {
         result.forEach(doc => {
             resources.push({ ...doc.data(), id: doc.id });
         })
-        console.log(resources);
         return resources;
     } catch (error) {
         ErrorHandler(error)

@@ -21,6 +21,43 @@ const createCourse = async (values) => {
     }
 }
 
+const enrollCourse = async (courseId, studentId) => {
+    try {
+        if (await isEnrolled(courseId, studentId)) return;
+        const result = firestore().collection('users').doc(studentId).update({
+            enrollments: firestore.FieldValue.arrayUnion({
+                course: courseId,
+            }),
+        });
+    } catch (error) {
+        return ErrorHandler(error)
+    }
+}
+
+const unEnrollCourse = async (courseId, studentId) => {
+    try {
+        const result = firestore().collection('users').doc(studentId).update({
+            enrollments: firestore.FieldValue.arrayRemove({
+                course: courseId,
+            }),
+        });
+    } catch (error) {
+        return ErrorHandler(error)
+    }
+}
+
+const isEnrolled = async (courseId, studentId) => {
+    try {
+        let courses = [];
+        const result = await firestore().collection('users').doc(studentId).get();
+        courses = result.data().enrollments;
+        if (courses.length == 0) return false;
+        else return (courses.some(course => course['course'] == courseId));
+    } catch (error) {
+        return ErrorHandler(error)
+    }
+}
+
 const getCourse = async (id) => {
     try {
         const results = await endpoint.doc(id).get();
@@ -52,11 +89,11 @@ const getCourses = async () => {
     try {
         let courses = [];
         const result = await endpoint.get();
-        result.forEach(doc => {
+        result.forEach(async (doc) => {
             let course = doc.data();
             course.id = doc.id;
             courses.push(course);
-        })
+        });
         return courses;
     } catch (error) {
         return ErrorHandler(error);
@@ -74,4 +111,14 @@ const updateCourse = async (docID, values) => {
 }
 
 
-export { createCourse, updateCourse, addCourseImage, getCourses, getCourse, getCoursesFromTeacher };
+export {
+    addCourseImage,
+    createCourse,
+    enrollCourse,
+    getCourse,
+    getCourses,
+    getCoursesFromTeacher,
+    isEnrolled,
+    unEnrollCourse,
+    updateCourse,
+};

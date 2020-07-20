@@ -4,6 +4,7 @@ import colors from '../config/styles/colors';
 import AppText from './AppText';
 
 const Card = ({ description, title, subTitle, image, onPress }) => {
+
     return (
         <TouchableWithoutFeedback style={styles.container} onPress={onPress}>
             <View style={styles.cardBody}>
@@ -15,11 +16,12 @@ const Card = ({ description, title, subTitle, image, onPress }) => {
                 <View style={styles.cardFooter}>
                     <AppText style={styles.cardTitle}>{title}</AppText>
                     {subTitle && <AppText style={styles.cardSubTitle}>(by {subTitle} )</AppText>}
-                    {description && <AppText style={styles.description}>{description}</AppText>}
+                    {description && <AppText numberOfLines={2} style={styles.description}>{description}</AppText>}
                 </View>
             </View>
         </TouchableWithoutFeedback>
-    )
+    );
+
 }
 
 export default Card
@@ -65,7 +67,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: "Asap-Regular",
         marginTop: 3,
-        color: colors.SECONDARY
+        color: colors.SECONDARY,
+        paddingRight: 6
     },
     imageContainer: {
         width: "100%"
