@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-import { AppButton } from '../components'
-import useAuth from '../Services/useAuth'
+import { AppButton } from '../../components'
+import useAuth from '../../Services/useAuth'
 
 
 const DashboardScreen = () => {

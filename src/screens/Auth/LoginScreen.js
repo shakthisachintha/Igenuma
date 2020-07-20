@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import colors from '../../config/styles/colors'
 import images from '../../config/images'
 import { AppForm, AppFormInput, SubmitButton } from '../../components/forms'
-import { AppButton } from '../../components'
+import { AppButton, AppTextButton } from '../../components'
 
 import useAuth from '../../Services/useAuth';
 
@@ -58,12 +58,12 @@ const LoginScreen = ({ navigation }) => {
                         placeholder="Password"
                     />
 
-                    <SubmitButton loading={auth.isLoading} title="Login" />
+                    <SubmitButton containerStyle={{ marginTop: 20 }} loading={auth.isLoading} title="Login" />
                 </AppForm>
 
                 <View style={styles.bottomContainer}>
-                    <AppButton containerStyle={{ backgroundColor: null }} btnTextStyle={{ color: colors.SECONDARY, fontSize: 15, textTransform: null }} title="Forgot password?" onPress={() => navigation.navigate("Register")} />
-                    <AppButton containerStyle={{ backgroundColor: null }} btnTextStyle={{ color: colors.PRIMARY, fontSize: 15, textTransform: null }} title="Register" onPress={() => navigation.navigate("Register")} />
+                    <AppTextButton containerStyle={{ backgroundColor: null }} btnTextStyle={{ color: colors.SECONDARY, fontSize: 15, textTransform: null }} title="Forgot password?" onPress={() => navigation.navigate("Register")} />
+                    <AppTextButton containerStyle={{ backgroundColor: null }} btnTextStyle={{ color: colors.PRIMARY, fontSize: 15, textTransform: null }} title="Register" onPress={() => navigation.navigate("Register")} />
                 </View>
             </View>
 
@@ -77,6 +77,8 @@ export default LoginScreen
 
 const styles = StyleSheet.create({
     bottomContainer: {
+        flex: 1,
+        width: "100%",
         flexDirection: 'row',
         justifyContent: "space-between"
     },

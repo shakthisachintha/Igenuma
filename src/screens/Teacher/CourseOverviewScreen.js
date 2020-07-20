@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, RefreshControl, View, ImageBackground, FlatList, TouchableWithoutFeedback, Alert } from 'react-native'
 
-import { AppText, AppButton, Card, AppIcon, ErrorHandler } from '../../components';
+import { AppText, AppButton, Card, AppIcon, ErrorHandler, AppTextButton } from '../../components';
 import colors from '../../config/styles/colors';
 import { getResources, deleteResource } from '../../api/resources';
 
 import ResourceCard from '../../components/ResourceCard';
-
 
 const CourseOverviewScreen = ({ navigation, route }) => {
     const course = route.params.course;
@@ -32,7 +31,6 @@ const CourseOverviewScreen = ({ navigation, route }) => {
         } catch (error) {
             ErrorHandler(error)
         }
-
     }
 
     const rightAction = (resourceID, fileName) => {
@@ -78,17 +76,27 @@ const CourseOverviewScreen = ({ navigation, route }) => {
 
             ListEmptyComponent={
                 <View style={{ flex: 1, marginTop: 70, alignItems: "center", justifyContent: "center" }}>
-                    <AppText style={styles.helpText}>
-                        You haven't uploaded any resources to this course yet.
+
+                    {isRefreshing ? (<AppText style={styles.helpText}>
+                        Loading resources...
+                    </AppText>) :
+                        (<><AppText style={styles.helpText}>
+                            You haven't uploaded any resources to this course yet.
                             </AppText>
-                    <AppButton onPress={() => navigation.navigate('UploadCourseResources', { course })} btnTextStyle={{ fontSize: 14, fontWeight: "normal", fontFamily: "Asap-Regular", textTransform: 'none' }} title="Upload resources" />
+                            <AppTextButton
+                                icon={{ name: "upload", color: "dodgerblue", size: 14 }}
+                                onPress={() => navigation.navigate('UploadCourseResources', { course })}
+                                containerStyle={{ width: 150, padding: 10 }}
+                                btnTextStyle={{ fontSize: 14, fontWeight: "normal", fontFamily: "Asap-Regular", color: "dodgerblue" }}
+                                title="Upload resources" />
+                        </>)}
                 </View>
             }
 
 
             data={resources}
             refreshing={isRefreshing}
-            renderItem={({ item }) => <ResourceCard createdAt={item.created_at} fileURI={item.url} courseName={course.name} rightAction={() => rightAction(item.id, item.fileName)} resourceTitle={item.title} resourceDesc={item.description} fileName={item.fileName} />}
+            renderItem={({ item }) => <ResourceCard createdAt={item.created_at} fileURI={item.url} rightAction={() => rightAction(item.id, item.fileName)} resourceTitle={item.title} resourceDesc={item.description} fileName={item.fileName} />}
             keyExtractor={item => item.id}
             refreshControl={<RefreshControl progressBackgroundColor="black" colors={[colors.WHITE, colors.DANGER, colors.SUCCESS]} refreshing={isRefreshing} onRefresh={getCourseResources} />}
         />

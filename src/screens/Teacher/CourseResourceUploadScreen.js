@@ -40,8 +40,8 @@ const CourseResourceUploadScreen = ({ navigation, route }) => {
         setProgress(0);
         setUploadVisible(true);
         try {
-            console.log(values);
-            uploadResource(values, onStateChange);
+            const result = await uploadResource(values, onStateChange);
+            if (result === false) throw (new Error("We couldn't upload that file."))
         } catch (error) {
             setUploadVisible(false);
             ErrorHandler(error)

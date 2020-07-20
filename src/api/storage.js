@@ -32,7 +32,7 @@ const getPathForFirebaseStorage = async (uri) => {
         const file = await RNFetchBlob.fs.stat(uri);
         return file.path
     } catch (error) {
-        ErrorHandler(error);
+        ErrorHandler(new Error("We couldn't locate that file."));
     }
 }
 

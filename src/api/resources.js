@@ -33,23 +33,25 @@ const deleteResource = async (resourceID, fileName) => {
 const uploadResource = async (resource, onStateChange = null, onSuccess = null) => {
     try {
         let { fileName, uri } = resource.file;
-        uri = await getPathForFirebaseStorage(uri);
-        // console.log(fileName, uri);
-        const successFunction = (downloadURL) => {
-            endpoint.add({
-                course: resource.course,
-                title: resource.title,
-                description: resource.description,
-                fileName: fileName,
-                url: downloadURL,
-                created_at: firestore.Timestamp.now()
-            });
-            if (onSuccess) onSuccess(downloadURL);
+        const realPath = await getPathForFirebaseStorage(uri);
+        if (!realPath) return false
+        else {
+            const successFunction = (downloadURL) => {
+                endpoint.add({
+                    course: resource.course,
+                    title: resource.title,
+                    description: resource.description,
+                    fileName: fileName,
+                    url: downloadURL,
+                    created_at: firestore.Timestamp.now()
+                });
+                if (onSuccess) onSuccess(downloadURL);
+            }
+            const task = uploader(resourceFolder, realPath, fileName, onStateChange, successFunction);
+            return task;
         }
-        const task = uploader(resourceFolder, uri, fileName, onStateChange, successFunction);
-        return task;
     } catch (error) {
-        ErrorHandler(error)
+        ErrorHandler(error);
     }
 }
 

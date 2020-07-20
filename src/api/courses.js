@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import { ErrorHandler } from '../components';
 import { uploader } from './storage';
+import { getResources } from './resources';
 
 const endpoint = firestore().collection('courses')
 const imageFolder = "/Images/Course/";
@@ -19,6 +20,18 @@ const createCourse = async (values) => {
     } catch (error) {
         return ErrorHandler(error);
     }
+}
+
+const getStudentFeed = async (studentId) => {
+    let feed = [];
+    const result = await firestore().collection('users').doc(studentId).get();
+    const courses = result.data().enrollments;
+    if (!courses) return feed;
+    courses.forEach(async (course) => {
+        const resources = await getResources(course.id);
+        feed.push(resources);
+    });
+
 }
 
 const enrollCourse = async (courseId, studentId) => {

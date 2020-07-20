@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
     password: Yup.string().required().min(6).label("Password"),
     userType: Yup.string().required().label('User role'),
     // concent: Yup.boolean().required().oneOf([true], "You should agree here"),
-    confirm_password: Yup.string().required().oneOf([Yup.ref('password')], 'Passwords must match')
+    confirm_password: Yup.string().required().oneOf([Yup.ref('password')], 'Passwords must match').label("Confirm Password")
 });
 
 
@@ -34,7 +34,7 @@ const RegisterScreen = ({ navigation }) => {
                 </View>
 
                 <AppForm
-                    initialValues={{ email: "", password: "", confirm_password: "", userType: "student", concent: false }}
+                    initialValues={{ name: "", email: "", password: "", confirm_password: "", userType: "student", concent: false }}
                     validationSchema={validationSchema}
                     onSubmit={auth.registerUser}
                 >

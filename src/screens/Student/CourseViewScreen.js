@@ -66,9 +66,9 @@ const CourseViewScreen = ({ navigation, route }) => {
 
                         <View style={styles.actionContainer}>
                             {course.isEnrolled ?
-                                (<AppButton onPress={() => handleUnEnroll(course, auth.user)} title="Unenroll" btnTextStyle={{ fontSize: 12 }} containerStyle={{ width: "25%", padding: 10, backgroundColor: colors.DANGER }} />)
+                                (<AppButton disabled={isRefreshing} onPress={() => handleUnEnroll(course, auth.user)} title="Unenroll" btnTextStyle={{ fontSize: 12 }} containerStyle={{ width: "25%", padding: 10, backgroundColor: colors.DANGER }} />)
                                 :
-                                (<AppButton onPress={() => handleEnroll(course, auth.user)} title="Enroll" btnTextStyle={{ fontSize: 16 }} containerStyle={{ width: "40%", backgroundColor: colors.BLUE }} />)
+                                (<AppButton disabled={isRefreshing} onPress={() => handleEnroll(course, auth.user)} title="Enroll" btnTextStyle={{ fontSize: 16 }} containerStyle={{ width: "40%", backgroundColor: colors.BLUE }} />)
                             }
                         </View>
 
