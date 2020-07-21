@@ -46,21 +46,18 @@ export default ResourceCard
 const styles = StyleSheet.create({
     cardBody: {
         borderRadius: 10,
-        marginVertical: 15,
+        marginVertical: 10,
         padding: 2,
-        // flexDirection: "row",
         overflow: "hidden",
-        // borderColor: "black",
-        // borderWidth: 2
     },
     swipeContainer: {
         backgroundColor: "white",
-        borderRadius: 20,
+        borderRadius: 10,
         paddingHorizontal: 10
     },
     container: {
-        marginVertical: 5,
-        padding: 10,
+        marginVertical: 10,
+        padding: 5,
         // backgroundColor: colors.WHITE,
     },
     fileNameContainer: {

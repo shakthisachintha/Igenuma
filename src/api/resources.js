@@ -9,7 +9,7 @@ const resourceFolder = "/Resources/Course/";
 const getResources = async (courseID) => {
     try {
         let resources = [];
-        const result = await endpoint.where('course', '==', courseID).orderBy('created_at', 'desc').get();
+        const result = await endpoint.where('course.id', '==', courseID).orderBy('created_at', 'desc').get();
         result.forEach(doc => {
             resources.push({ ...doc.data(), id: doc.id });
         })
@@ -38,7 +38,7 @@ const uploadResource = async (resource, onStateChange = null, onSuccess = null) 
         else {
             const successFunction = (downloadURL) => {
                 endpoint.add({
-                    course: resource.course,
+                    course: { id: resource.course.id, name: resource.course.name },
                     title: resource.title,
                     description: resource.description,
                     fileName: fileName,

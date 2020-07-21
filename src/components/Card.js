@@ -1,24 +1,23 @@
 import React from 'react'
-import { StyleSheet, TouchableWithoutFeedback, View, Image } from 'react-native'
+import { StyleSheet, TouchableWithoutFeedback, View, Image, ImageBackground } from 'react-native'
 import colors from '../config/styles/colors';
 import AppText from './AppText';
 
-const Card = ({ description, title, subTitle, image, onPress }) => {
+const Card = ({ description, titleStyles = { fontSize: 18, color: colors.WHITE, fontFamily: "Asap-SemiBold" }, title, subTitle, image, onPress }) => {
 
     return (
-        <TouchableWithoutFeedback style={styles.container} onPress={onPress}>
-            <View style={styles.cardBody}>
-                {image && (<View style={styles.imageContainer}>
-                    <Image source={{ uri: image }} style={styles.cardImage} />
-                </View>)}
-
-
-                <View style={styles.cardFooter}>
-                    <AppText style={styles.cardTitle}>{title}</AppText>
-                    {subTitle && <AppText style={styles.cardSubTitle}>(by {subTitle} )</AppText>}
-                    {description && <AppText numberOfLines={2} style={styles.description}>{description}</AppText>}
-                </View>
-            </View>
+        <TouchableWithoutFeedback onPress={onPress}>
+            <ImageBackground source={{ uri: image }} style={{ marginVertical: 10, overflow: "hidden", borderRadius: 5, width: "100%", aspectRatio: 16 / 9, height: "auto" }}>
+                <TouchableWithoutFeedback onPress={onPress}>
+                    <View style={{ flex: 1, justifyContent: "flex-end" }}>
+                        <View style={styles.cardFooter}>
+                            <AppText numberOfLines={1} style={{ ...styles.cardTitle, ...titleStyles }}>{title}</AppText>
+                            {subTitle && <AppText style={styles.cardSubTitle}>(by {subTitle} )</AppText>}
+                            {description && <AppText numberOfLines={2} style={styles.description}>{description}</AppText>}
+                        </View>
+                    </View>
+                </TouchableWithoutFeedback>
+            </ImageBackground>
         </TouchableWithoutFeedback>
     );
 
@@ -27,21 +26,11 @@ const Card = ({ description, title, subTitle, image, onPress }) => {
 export default Card
 
 const styles = StyleSheet.create({
-    cardBody: {
-        borderRadius: 10,
-        marginVertical: 15,
-        backgroundColor: colors.WHITE,
-        // flexDirection: "row",
-        overflow: "hidden",
-        // borderColor: "black",
-        // borderWidth: 2
 
-    },
     cardFooter: {
-        justifyContent: "center",
-        paddingBottom: 15,
-        paddingTop: 15,
-        paddingLeft: 15
+        backgroundColor: "black",
+        opacity: 0.9,
+        padding: 10
     },
     cardImage: {
         width: '100%',
@@ -50,8 +39,9 @@ const styles = StyleSheet.create({
     },
     cardTitle: {
         fontFamily: "Asap-SemiBold",
-        fontSize: 22,
-        color: colors.black
+        fontSize: 18,
+        color: colors.WHITE,
+        paddingRight: 6
     },
     cardSubTitle: {
         fontSize: 14,
@@ -60,11 +50,8 @@ const styles = StyleSheet.create({
         marginTop: 3,
         color: colors.BLUE
     },
-    container: {
-        marginVertical: 20
-    },
     description: {
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: "Asap-Regular",
         marginTop: 3,
         color: colors.SECONDARY,

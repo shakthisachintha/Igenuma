@@ -56,7 +56,7 @@ const CourseResourceUploadScreen = ({ navigation, route }) => {
                 <View style={styles.formContainer}>
                     <AppText style={styles.h1}>Upload Resource</AppText>
                     <AppForm
-                        initialValues={{ course: course.id, file: { fileName: null, uri: "" }, title: "", description: "" }}
+                        initialValues={{ course: course, file: { fileName: null, uri: "" }, title: "", description: "" }}
                         validationSchema={validationSchema}
                         onSubmit={handleSubmit}
                     >

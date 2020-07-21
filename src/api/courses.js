@@ -22,17 +22,26 @@ const createCourse = async (values) => {
     }
 }
 
-const getStudentFeed = async (studentId) => {
-    let feed = [];
-    const result = await firestore().collection('users').doc(studentId).get();
-    const courses = result.data().enrollments;
-    if (!courses) return feed;
-    courses.forEach(async (course) => {
-        const resources = await getResources(course.id);
-        feed.push(resources);
-    });
 
+const getStudentFeed = async (studentId) => {
+    try {
+        let feed = [];
+        const result = await firestore().collection('users').doc(studentId).get();
+        const courses = await result.data().enrollments;
+        if (!courses) return feed;
+        await Promise.all(courses.map(async (course) => {
+            const resources = await getResources(course.course);
+            resources.forEach(res => {
+                feed.push(res);
+            })
+        }));
+        feed = _.reverse(_.sortBy(feed, ['created_at._seconds']))
+        return feed;
+    } catch (error) {
+        ErrorHandler(error)
+    }
 }
+
 
 const enrollCourse = async (courseId, studentId) => {
     try {
@@ -47,6 +56,7 @@ const enrollCourse = async (courseId, studentId) => {
     }
 }
 
+
 const unEnrollCourse = async (courseId, studentId) => {
     try {
         const result = firestore().collection('users').doc(studentId).update({
@@ -59,12 +69,13 @@ const unEnrollCourse = async (courseId, studentId) => {
     }
 }
 
+
 const isEnrolled = async (courseId, studentId) => {
     try {
         let courses = [];
         const result = await firestore().collection('users').doc(studentId).get();
         courses = result.data().enrollments;
-        if (courses.length == 0) return false;
+        if (!courses) return false;
         else return (courses.some(course => course['course'] == courseId));
     } catch (error) {
         return ErrorHandler(error)
@@ -113,6 +124,21 @@ const getCourses = async () => {
     }
 }
 
+const getNewCourses = async () => {
+    try {
+        let courses = [];
+        const result = await endpoint.limit(5).orderBy('created_at', 'desc').get();
+        result.forEach(async (doc) => {
+            let course = doc.data();
+            course.id = doc.id;
+            courses.push(course);
+        });
+        return courses;
+    } catch (error) {
+        return ErrorHandler(error);
+    }
+}
+
 const updateCourse = async (docID, values) => {
     try {
         const resp = await endpoint.doc(docID).update(values);
@@ -131,6 +157,8 @@ export {
     getCourse,
     getCourses,
     getCoursesFromTeacher,
+    getNewCourses,
+    getStudentFeed,
     isEnrolled,
     unEnrollCourse,
     updateCourse,
