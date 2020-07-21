@@ -30,7 +30,7 @@ const DashboardScreen = ({ navigation }) => {
         return (
             <View>
                 <Card
-                    onPress={() => navigation.navigate('Courses', { screen: 'CourseOverview', params: { course: item } },)}
+                    onPress={() => navigation.navigate('Courses', { screen: 'CourseOverview', params: { course: item } })}
                     title={item.name}
                     image={item.image}
                     description={item.description} />

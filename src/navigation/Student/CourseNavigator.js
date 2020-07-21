@@ -2,7 +2,7 @@ import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack"
 import { DrawerActions } from '@react-navigation/native';
 
-import { AppIcon } from '../../components';
+import { AppIcon, AppHeader } from '../../components';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { CoursesScreen, CourseViewScreen } from '../../screens/Student/';
 
@@ -19,9 +19,13 @@ const headerLeft = (navigation) => {
     )
 }
 
+// screenOptions = {({ navigation, route }) => ({ headerLeft: () => headerLeft(navigation), headerTransparent: false, headerStyle: { backgroundColor: "white" }, headerTitleStyle: { fontFamily: "Asap-Regular", alignSelf: "flex-end" }, gestureEnabled: true, headerTintColor: "black" })} 
+
 const CourseNavigator = () => (
 
-    <Stack.Navigator screenOptions={({ navigation, route }) => ({ headerLeft: () => headerLeft(navigation), headerTransparent: false, headerStyle: { backgroundColor: "white" }, headerTitleStyle: { fontFamily: "Asap-Regular", alignSelf: "flex-end" }, gestureEnabled: true, headerTintColor: "black" })} >
+    <Stack.Navigator mode="modal" screenOptions={{
+        header: ({ navigation, scene }) => { return <AppHeader title={scene.route.params.course.name} navigation={navigation} /> }
+    }}>
 
         <Stack.Screen
             name="Courses"

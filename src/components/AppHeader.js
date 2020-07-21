@@ -11,7 +11,7 @@ const AppHeader = ({ navigation, title }) => {
         <View style={styles.headerContainer}>
             <View>
                 <TouchableOpacity style={styles.navBtnContainer} onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-                    <Icon size={30} color="white" name="navicon" />
+                    <Icon size={35} color="white" name="navicon" />
                 </TouchableOpacity>
             </View>
             <View style={{ flex: 1, alignItems: "flex-end", marginEnd: 10 }}>
@@ -25,13 +25,14 @@ export default AppHeader
 
 const styles = StyleSheet.create({
     h1: {
-        fontSize: 28,
-        color: colors.WHITE
+        fontSize: 26,
+        color: colors.WHITE,
+        fontFamily: "Asap-Regular"
     },
     headerContainer: {
         alignItems: "center",
         flexDirection: "row",
-        paddingVertical: 15,
+        paddingVertical: 17,
         backgroundColor: colors.PRIMARY
     },
     muted: {

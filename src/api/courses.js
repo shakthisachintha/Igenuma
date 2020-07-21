@@ -42,6 +42,22 @@ const getStudentFeed = async (studentId) => {
     }
 }
 
+const enrolledCourses = async (studentId) => {
+    try {
+        let myCourses = [];
+        const result = await firestore().collection('users').doc(studentId).get();
+        const enrollments = await result.data().enrollments;
+        if (!enrollments) return myCourses;
+        await Promise.all(enrollments.map(async (course) => {
+            const res = await getCourse(course.course);
+            myCourses.push(res)
+        }));
+        return myCourses;
+    } catch (error) {
+        ErrorHandler(error)
+    }
+}
+
 
 const enrollCourse = async (courseId, studentId) => {
     try {
@@ -154,6 +170,7 @@ export {
     addCourseImage,
     createCourse,
     enrollCourse,
+    enrolledCourses,
     getCourse,
     getCourses,
     getCoursesFromTeacher,
