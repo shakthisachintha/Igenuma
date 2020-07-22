@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import * as courseAPI from '../../api/courses';
 
 import { AppForm, AppFormInput, SubmitButton, AppFormImage } from '../../components/forms'
-import { ErrorHandler, AppButton } from '../../components';
+import { ErrorHandler, AppButton, AppHeader } from '../../components';
 import UploadScreen from '../UploadScreen';
 import useAuth from '../../Services/useAuth';
 import colors from '../../config/styles/colors';
@@ -52,6 +52,8 @@ const CreateCourseScreen = ({ navigation }) => {
     return (
         <>
             <UploadScreen onDone={() => setUploadVisible(false)} text="Creating course..." indeterminate={indeterminate} progress={progress} visible={uploadVisible} />
+
+            <AppHeader title="Create a new course" navigation={navigation} />
             <View style={styles.container}>
 
                 <AppForm

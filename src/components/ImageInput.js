@@ -6,6 +6,7 @@ import colors from '../config/styles/colors'
 import AppIcon from './AppIcon'
 
 import { requestMultiple, PERMISSIONS } from 'react-native-permissions';
+import { AppText } from '.';
 
 const PermissionRequest = () => {
     requestMultiple([
@@ -64,8 +65,9 @@ const ImageInput = ({ imageURI, onChangeImage }) => {
 
     return (
         <TouchableWithoutFeedback onPress={handlePress}>
-            <View style={styles.container}>
-                {!imageURI && <AppIcon name="camera" backgroundColor="white" iconColor="black" size={50} />}
+            <View style={{ ...styles.container }}>
+                {!imageURI && <AppIcon name="camera" backgroundColor="transparent" iconColor="black" size={50} />}
+                {!imageURI && <AppText style={{ fontSize: 18, fontFamily: "Asap-Regular" }}>Select a picture</AppText>}
                 {imageURI && <Image source={{ uri: imageURI }} style={styles.image} />}
             </View>
         </TouchableWithoutFeedback>
@@ -77,15 +79,19 @@ export default ImageInput
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
-        backgroundColor: colors.PRIMARY,
+        flexDirection: "row",
+        borderColor: "black",
+        borderWidth: 0.1,
+        // height: 100,
+        width: 320,
         borderRadius: 10,
-        height: 100,
-        justifyContent: 'center',
-        width: 100,
-        overflow: "hidden"
+        marginBottom: 10,
+        // justifyContent: 'center',
+        overflow: "hidden",
     },
     image: {
+        height: "auto",
         width: "100%",
-        height: "100%",
+        aspectRatio: 16 / 9
     }
 })

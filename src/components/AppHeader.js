@@ -15,7 +15,7 @@ const AppHeader = ({ navigation, title }) => {
                 </TouchableOpacity>
             </View>
             <View style={{ flex: 1, alignItems: "flex-end", marginEnd: 10 }}>
-                <AppText style={styles.h1}>{title}</AppText>
+                <AppText numberOfLines={1} style={styles.h1}>{title}</AppText>
             </View>
         </View>
     )
@@ -25,11 +25,13 @@ export default AppHeader
 
 const styles = StyleSheet.create({
     h1: {
-        fontSize: 26,
+        fontSize: 22,
         color: colors.WHITE,
-        fontFamily: "Asap-Regular"
+        fontFamily: "Asap-Regular",
+        fontWeight: "100"
     },
     headerContainer: {
+        zIndex: 1,
         alignItems: "center",
         flexDirection: "row",
         paddingVertical: 17,

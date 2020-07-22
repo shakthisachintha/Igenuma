@@ -5,7 +5,7 @@ import ImageInput from '../ImageInput';
 import ErrorMessage from './ErrorMessage';
 
 
-const AppFormImage = ({ name }) => {
+const AppFormImage = ({ name, ...otherProps }) => {
 
     const { setFieldTouched, setFieldValue, errors, touched, values } = useFormikContext();
 
@@ -16,7 +16,7 @@ const AppFormImage = ({ name }) => {
 
     return (
         <View>
-            <ImageInput imageURI={values[name]} onChangeImage={handleAdd} />
+            <ImageInput {...otherProps} imageURI={values[name]} onChangeImage={handleAdd} />
             <View style={styles.errorContainer}>
                 {touched[name] && <ErrorMessage error={errors[name]} />}
             </View>

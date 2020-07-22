@@ -10,8 +10,7 @@ import { AppIcon } from '../../components';
 import colors from '../../config/styles/colors';
 import DrawerHeader from '../DrawerHeader';
 import CreateCourseScreen from '../../screens/Teacher/CreateCourseScreen';
-import ManageCoursesScreen from '../../screens/Teacher/ManageCoursesScreen';
-import CourseNavigator from '../CourseNavigator';
+import CourseNavigator from './CourseNavigator';
 
 
 const Drawer = createDrawerNavigator();
