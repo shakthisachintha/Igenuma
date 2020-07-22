@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, FlatList, RefreshControl, ScrollView } from 're
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import * as courseAPI from '../../api/courses';
-import { AppText, AppButton, Card, AppHeader } from '../../components';
+import { AppText, AppButton, Card, AppHeader, AppTextButton } from '../../components';
 import colors from '../../config/styles/colors';
 import useAuth from '../../Services/useAuth';
 
@@ -36,7 +36,7 @@ const ManageCoursesScreen = ({ navigation }) => {
                     <AppText style={styles.helpText}>
                         You haven't created any course yet.
                             </AppText>
-                    <AppButton onPress={() => navigation.navigate('CreateCourseScreen')} btnTextStyle={{ fontSize: 14, fontWeight: "normal", fontFamily: "Asap-Regular", textTransform: 'none' }} title="Create a course now" />
+                    <AppTextButton icon={{ name: "book-plus-multiple", size: 14 }} onPress={() => navigation.navigate('CreateCourseScreen')} btnTextStyle={{ fontSize: 14, fontWeight: "normal", fontFamily: "Asap-Regular", textTransform: 'none' }} title="Create a course now" />
                 </View>
             }
 

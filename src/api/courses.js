@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import { ErrorHandler } from '../components';
 import { uploader } from './storage';
-import { getResources } from './resources';
+import { getResources, deleteResource } from './resources';
 
 const endpoint = firestore().collection('courses')
 const imageFolder = "/Images/Course/";
@@ -62,11 +62,14 @@ const enrolledCourses = async (studentId) => {
 const enrollCourse = async (courseId, studentId) => {
     try {
         if (await isEnrolled(courseId, studentId)) return;
-        const result = firestore().collection('users').doc(studentId).update({
+        await firestore().collection('users').doc(studentId).update({
             enrollments: firestore.FieldValue.arrayUnion({
                 course: courseId,
             }),
         });
+        endpoint.doc(courseId).update({
+            enrollments: firestore.FieldValue.arrayUnion({ student: studentId }),
+        })
     } catch (error) {
         return ErrorHandler(error)
     }
@@ -75,13 +78,46 @@ const enrollCourse = async (courseId, studentId) => {
 
 const unEnrollCourse = async (courseId, studentId) => {
     try {
-        const result = firestore().collection('users').doc(studentId).update({
+        await firestore().collection('users').doc(studentId).update({
             enrollments: firestore.FieldValue.arrayRemove({
                 course: courseId,
             }),
         });
+        endpoint.doc(courseId).update({
+            enrollments: firestore.FieldValue.arrayRemove({ student: studentId }),
+        })
     } catch (error) {
         return ErrorHandler(error)
+    }
+}
+
+const deleteCourse = async (course, stateChange = null) => {
+
+    try {
+        // remove enrollments
+        if (stateChange) stateChange("Unenrolling students...");
+        const enrolled_students = await (await endpoint.doc(course.id).get()).data().enrollments;
+        if (enrolled_students && enrolled_students.length > 0) {
+            await Promise.all(enrolled_students.map(async ({ student }) => {
+                await unEnrollCourse(course.id, student);
+            }));
+        }
+
+        // remove resources
+        if (stateChange) stateChange("Removing resources...");
+        const resources = await getResources(course.id);
+        if (resources && resources.length > 0) {
+            await Promise.all(resources.forEach(async (resource) => {
+                await deleteResource(resource.id, resource.fileName);
+            }));
+        }
+
+        // remove course
+        if (stateChange) stateChange("Deleting course...");
+        await endpoint.doc(course.id).delete();
+        if (stateChange) stateChange("Course deleted");
+    } catch (error) {
+        ErrorHandler(error);
     }
 }
 
@@ -169,6 +205,7 @@ const updateCourse = async (docID, values) => {
 export {
     addCourseImage,
     createCourse,
+    deleteCourse,
     enrollCourse,
     enrolledCourses,
     getCourse,

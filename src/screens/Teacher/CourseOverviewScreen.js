@@ -64,9 +64,10 @@ const CourseOverviewScreen = ({ navigation, route }) => {
                         <AppText style={styles.description}>{course.description}</AppText>
                         {/* <AppText style={styles.teacher}>{course.teacher.name}</AppText> */}
 
-                        {resources.length > 0 && (<View style={styles.actionContainer}>
+                        <View style={styles.actionContainer}>
                             <AppButton onPress={() => navigation.navigate('UploadCourseResources', { course })} title="Upload resource" btnTextStyle={{ fontSize: 16 }} containerStyle={{ width: "40%" }} />
-                        </View>)}
+                            <AppIcon name="pencil" size={45} iconColor="gold" onPress={() => navigation.navigate('EditCourse', { course })} />
+                        </View>
 
                         {resources.length > 0 && <AppText style={styles.h3} >Course Resources</AppText>}
 
@@ -108,6 +109,7 @@ export default CourseOverviewScreen
 const styles = StyleSheet.create({
     actionContainer: {
         marginTop: 20,
+        alignItems: "center",
         flexDirection: "row",
         justifyContent: "space-between"
     },

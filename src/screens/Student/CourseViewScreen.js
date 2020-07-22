@@ -12,8 +12,8 @@ import useAuth from '../../Services/useAuth';
 
 const CourseViewScreen = ({ navigation, route }) => {
     const auth = useAuth();
-
-    const [course, setCourse] = useState(route.params.course);
+    let course = route.params.course;
+    const [isEnrolledState, setisEnrolled] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [resources, setResources] = useState([]);
 
@@ -22,8 +22,8 @@ const CourseViewScreen = ({ navigation, route }) => {
         setResources([]);
 
         const enrolled = await isEnrolled(course.id, auth.user.id);
-
-        setCourse({ ...course, isEnrolled: enrolled });
+        // course = { ...course, isEnrolled: enrolled}
+        setisEnrolled(enrolled);
 
         if (!enrolled) return setIsRefreshing(false);
 
@@ -33,18 +33,26 @@ const CourseViewScreen = ({ navigation, route }) => {
     }
 
     const handleEnroll = async (course, user) => {
+        setIsRefreshing(true);
         await enrollCourse(course.id, user.id);
+        setIsRefreshing(false);
         getCourseResources();
     }
 
     const handleUnEnroll = async (course, user) => {
+        setIsRefreshing(true);
         await unEnrollCourse(course.id, user.id);
+        setIsRefreshing(false);
         getCourseResources();
     }
 
     useEffect(() => {
         getCourseResources();
     }, [])
+
+    useEffect(() => {
+        getCourseResources();
+    }, [route])
 
     return (
         <FlatList
@@ -65,7 +73,7 @@ const CourseViewScreen = ({ navigation, route }) => {
                         <AppText style={styles.description}>{course.description}</AppText>
 
                         <View style={styles.actionContainer}>
-                            {course.isEnrolled ?
+                            {isEnrolledState ?
                                 (<AppButton disabled={isRefreshing} onPress={() => handleUnEnroll(course, auth.user)} title="Unenroll" btnTextStyle={{ fontSize: 12 }} containerStyle={{ width: "25%", padding: 10, backgroundColor: colors.DANGER }} />)
                                 :
                                 (<AppButton disabled={isRefreshing} onPress={() => handleEnroll(course, auth.user)} title="Enroll" btnTextStyle={{ fontSize: 16 }} containerStyle={{ width: "40%", backgroundColor: colors.BLUE }} />)
@@ -81,7 +89,7 @@ const CourseViewScreen = ({ navigation, route }) => {
             ListEmptyComponent={
                 <View style={{ flex: 1, marginTop: 70, alignItems: "center", justifyContent: "center" }}>
                     <AppText style={styles.helpText}>
-                        {isRefreshing ? "Loading resources..." : course.isEnrolled ? "We couldn't find any resources for this course." : "Enroll now to see the course resources."}
+                        {isRefreshing ? "Loading resources..." : isEnrolledState ? "We couldn't find any resources for this course." : "Enroll now to see the course resources."}
                     </AppText>
 
                 </View>

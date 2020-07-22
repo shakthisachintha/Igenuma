@@ -68,7 +68,7 @@ const DashboardScreen = ({ navigation }) => {
                     <View style={{ flex: 1, justifyContent: "center" }}>
                         <View style={{ alignItems: "center" }}>
                             <AppText>
-                                You haven't enrolled in any courses yet.
+                                We couldn't find any course updates.
                             </AppText>
 
                             <AppText style={{ textTransform: "uppercase", marginBottom: 10, marginTop: 10 }}>Recently added courses</AppText>

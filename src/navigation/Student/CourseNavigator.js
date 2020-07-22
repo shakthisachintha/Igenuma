@@ -23,13 +23,14 @@ const headerLeft = (navigation) => {
 
 const CourseNavigator = () => (
 
-    <Stack.Navigator mode="modal" screenOptions={{
+    <Stack.Navigator mode="modal" initialRouteName="Courses" screenOptions={{
         header: ({ navigation, scene }) => { return <AppHeader title={scene.route.params.course.name} navigation={navigation} /> }
     }}>
 
         <Stack.Screen
             name="Courses"
             component={CoursesScreen}
+
             options={{
                 headerShown: false,
             }}
