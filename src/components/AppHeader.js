@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         fontWeight: "100"
     },
     headerContainer: {
-        zIndex: 1,
+        zIndex: 10,
         alignItems: "center",
         flexDirection: "row",
         paddingVertical: 17,
