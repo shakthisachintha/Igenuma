@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-
+import auth from '@react-native-firebase/auth';
 
 const registerUser = ({ name, email, password, userType }, actions) => {
     const userCollection = firestore().collection('users');
@@ -16,8 +16,12 @@ const registerUser = ({ name, email, password, userType }, actions) => {
     })
 }
 
-const changeProfilePicture = () => {
-
+const resetPassword = async (email) => {
+    try {
+        await auth().sendPasswordResetEmail(email);
+    } catch (error) {
+        ErrorHandler(error);
+    }
 }
 
-export default { registerUser };
+export { registerUser, resetPassword };

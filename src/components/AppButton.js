@@ -4,7 +4,7 @@ import { TouchableOpacity, StyleSheet, Text, ActivityIndicator, View } from 'rea
 import colors from '../config/styles/colors'
 
 const AppButton = ({ title, onPress, disabled = false, loaderColor = null, loading = false, containerStyle, btnTextStyle }) => {
-    const bgColor = !loading ? "black" : "#292929"
+    const bgColor = !loading || disabled ? "black" : "#292929"
     return (
         <TouchableOpacity activeOpacity={0.85} disabled={loading || disabled} style={[{ ...styles.button, backgroundColor: bgColor }, containerStyle]} onPress={onPress}>
             <View style={styles.colLeft} >

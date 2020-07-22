@@ -6,24 +6,18 @@ import images from '../config/images';
 
 const WelcomeScreen = ({ navigation }) => {
 
-    const auth = useAuth();
-
-    const loading = () => {
-        setTimeout(() => {
-            if (!auth.user) {
-                navigation.navigate('Login')
-            }
-        }, 1500);
+    const onLoginSucess = (loading, user) => {
+        if (!user) {
+            navigation.navigate("Login")
+        }
     }
 
-    useEffect(() => {
-        loading();
-    }, [])
+    const auth = useAuth(onLoginSucess);
 
     return (
         <View style={styles.container}>
             <Image style={styles.logo} source={images.LOGO_ENGLISH} />
-            {!auth.isLoading && <ActivityIndicator style={{ marginTop: 20 }} color="black" />}
+            {auth.isLoading && <ActivityIndicator style={{ marginTop: 20 }} color="black" />}
             <Text style={styles.text}>Igenuma e-Learning</Text>
         </View>
     );

@@ -8,8 +8,8 @@ import StudentDashboard from './navigation/Student/DashboardNavigator';
 import AuthContext from './auth/context';
 import { OfflineNotice } from './components';
 
-const App = () => {
 
+const App = () => {
   const [user, setUser] = useState(null);
 
   return (

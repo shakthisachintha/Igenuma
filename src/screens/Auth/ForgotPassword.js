@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import * as Yup from 'yup';
@@ -8,31 +8,28 @@ import images from '../../config/images'
 import { AppForm, AppFormInput, SubmitButton } from '../../components/forms'
 import { AppButton, AppTextButton } from '../../components'
 
-import useAuth from '../../Services/useAuth';
-import { CommonActions } from '@react-navigation/native';
+import { resetPassword } from '../../Services/User';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email().required().label("Email address"),
-    password: Yup.string().required().min(6).label("Password")
 });
 
 
-const LoginScreen = ({ navigation }) => {
+const ForgotPassword = ({ navigation }, { resetForm }) => {
 
-    useEffect(() => {
-        navigation.dispatch(state => {
-            // Remove the Loading route from the stack
-            const routes = state.routes.filter(r => r.name !== 'Splash');
+    const [isLoading, setIsLoading] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
+    const [resetState, setResetState] = useState("send reset link");
 
-            return CommonActions.reset({
-                ...state,
-                routes,
-                index: routes.length - 1,
-            });
-        });
-    }, [])
+    const handleSubmit = async ({ email },) => {
+        setIsLoading(true);
+        setResetState("sending link");
+        await resetPassword(email);
+        setIsDisabled(true);
+        setIsLoading(false);
+        setResetState("Reset link sent");
+    }
 
-    const auth = useAuth()
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -44,41 +41,27 @@ const LoginScreen = ({ navigation }) => {
 
             <View style={styles.formContainer}>
                 <View style={styles.headingContainer}>
-                    <Text style={styles.h1}>Login</Text>
-                    <Text style={styles.subHeading}>Hi there! Nice to see you again.</Text>
+                    <Text style={styles.h1}>Recover password</Text>
+                    <Text style={styles.subHeading}>Forgot password? No worries, lets recover</Text>
                 </View>
 
                 <AppForm
-                    initialValues={{ email: "", password: "" }}
+                    initialValues={{ email: "" }}
                     validationSchema={validationSchema}
-                    onSubmit={auth.loginUser}
+                    onSubmit={handleSubmit}
                 >
                     <AppFormInput
                         autoCapitalize="none"
                         autoCorrect={false}
                         icon="email"
                         name="email"
-                        mode="outlined"
                         placeholder="Email address"
                     />
-                    <AppFormInput
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        secureTextEntry
-                        indicateSymbol={false}
-                        icon="lock"
-                        name="password"
-                        mode="outlined"
-                        placeholder="Password"
-                    />
 
-                    <SubmitButton containerStyle={{ marginTop: 20 }} loading={auth.isLoading} title="Login" />
+                    <SubmitButton disabled={isDisabled} containerStyle={{ marginTop: 20 }} loading={isLoading} title={resetState} />
+
                 </AppForm>
 
-                <View style={styles.bottomContainer}>
-                    <AppTextButton containerStyle={{ backgroundColor: null }} btnTextStyle={{ color: colors.SECONDARY, fontSize: 15, textTransform: null }} title="Forgot password?" onPress={() => navigation.navigate("ForgotPassword")} />
-                    <AppTextButton containerStyle={{ backgroundColor: null }} btnTextStyle={{ color: colors.PRIMARY, fontSize: 15, textTransform: null }} title="Register" onPress={() => navigation.navigate("Register")} />
-                </View>
             </View>
 
 
@@ -87,7 +70,7 @@ const LoginScreen = ({ navigation }) => {
     )
 }
 
-export default LoginScreen
+export default ForgotPassword
 
 const styles = StyleSheet.create({
     bottomContainer: {

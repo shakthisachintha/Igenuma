@@ -9,10 +9,9 @@ import { ErrorHandler } from '../components';
 import { uploader } from '../api/storage';
 
 
-export default useAuth = () => {
+export default useAuth = (onLoginSuccess = null) => {
     const { user, setUser } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(true);
-
     function onAuthStateChanged(data) {
         setIsLoading(true);
         if (data) {
@@ -23,17 +22,21 @@ export default useAuth = () => {
                     let userObj = _.pick(userData, ['email', 'name', 'userType', 'image']);
                     userObj.image = data.photoURL;
                     userObj.id = data.uid;
+                    if (onLoginSuccess) onLoginSuccess(true, userObj);
                     setUser(userObj);
                 }
             }).catch(() => {
                 setIsLoading(false);
+                if (onLoginSuccess) onLoginSuccess(false, null);
                 alert("Unkown login error occured!");
                 setUser(null);
             })
         } else {
+            if (onLoginSuccess) onLoginSuccess(false, null);
             setIsLoading(false);
             setUser(null);
         }
+
     }
 
     useEffect(() => {
