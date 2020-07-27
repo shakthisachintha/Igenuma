@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, ScrollView } from 'react-native'
 import * as Yup from 'yup';
 
 import * as courseAPI from '../../api/courses';
@@ -53,35 +53,41 @@ const CreateCourseScreen = ({ navigation }) => {
         <>
             <UploadScreen onDone={() => setUploadVisible(false)} text="Creating course..." indeterminate={indeterminate} progress={progress} visible={uploadVisible} />
 
-            <AppHeader title="Create a new course" navigation={navigation} />
-            <View style={styles.container}>
 
-                <AppForm
-                    initialValues={{ teacher: { id: user.id, name: user.name }, name: "", description: "", image: null }}
-                    validationSchema={validationSchema}
-                    onSubmit={handleSubmit}
-                >
 
-                    <AppFormImage name="image" />
-                    <AppFormInput
-                        autoCapitalize="words"
-                        autoCorrect={false}
-                        name="name"
-                        placeholder="Course name"
-                    />
-                    <AppFormInput
-                        autoCorrect={false}
-                        name="description"
-                        multiline={true}
-                        numberOfLines={3}
-                        placeholder="Course description"
-                    />
+            <ScrollView alwaysBounceVertical={true} showsVerticalScrollIndicator={false} stickyHeaderIndices={[0]}>
+                <AppHeader title="Create a new course" navigation={navigation} />
+                <View style={styles.container}>
+                    <AppForm
+                        initialValues={{ teacher: { id: user.id, name: user.name }, name: "", description: "", image: null }}
+                        validationSchema={validationSchema}
+                        onSubmit={handleSubmit}
+                    >
 
-                    <SubmitButton title="Create course" />
+                        <AppFormImage name="image" />
 
-                </AppForm>
+                        <AppFormInput
+                            autoCapitalize="words"
+                            autoCorrect={false}
+                            name="name"
+                            placeholder="Course name"
+                        />
+                        <AppFormInput
+                            autoCorrect={false}
+                            name="description"
+                            multiline={true}
+                            numberOfLines={3}
+                            placeholder="Course description"
+                        />
+
+                        <SubmitButton title="Create course" />
+
+                    </AppForm>
+                </View>
                 <AppButton containerStyle={{ backgroundColor: null }} btnTextStyle={{ color: colors.PRIMARY, fontSize: 14, fontWeight: "normal", fontFamily: "Asap-Regular", textTransform: 'none' }} onPress={() => navigation.navigate('ManageCourses')} title="View courses" />
-            </View>
+            </ScrollView>
+
+
         </>
     )
 }
@@ -91,6 +97,9 @@ export default CreateCourseScreen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: "100%",
+        height: "100%",
+        marginTop: "20%",
         paddingHorizontal: 40,
         alignItems: "center",
         justifyContent: "center"
