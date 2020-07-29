@@ -65,7 +65,7 @@ const CourseOverviewScreen = ({ navigation, route }) => {
                         {/* <AppText style={styles.teacher}>{course.teacher.name}</AppText> */}
 
                         <View style={styles.actionContainer}>
-                            <AppButton onPress={() => navigation.navigate('UploadCourseResources', { course })} title="Upload resource" btnTextStyle={{ fontSize: 16 }} containerStyle={{ width: "40%" }} />
+                            <AppButton onPress={() => navigation.navigate('UploadCourseResources', { course })} title="Upload resource" btnTextStyle={{ fontSize: 16 }} containerStyle={{ width: "50%" }} />
                             <AppIcon name="pencil" size={45} iconColor="gold" onPress={() => navigation.navigate('EditCourse', { course })} />
                         </View>
 
@@ -87,7 +87,7 @@ const CourseOverviewScreen = ({ navigation, route }) => {
                             <AppTextButton
                                 icon={{ name: "upload", color: "dodgerblue", size: 14 }}
                                 onPress={() => navigation.navigate('UploadCourseResources', { course })}
-                                containerStyle={{ width: 150, padding: 10 }}
+                                containerStyle={{ width: 200, padding: 10 }}
                                 btnTextStyle={{ fontSize: 14, fontWeight: "normal", fontFamily: "Asap-Regular", color: "dodgerblue" }}
                                 title="Upload resources" />
                         </>)}
