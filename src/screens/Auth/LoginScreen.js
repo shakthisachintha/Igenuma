@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import colors from '../../config/styles/colors'
 import images from '../../config/images'
 import { AppForm, AppFormInput, SubmitButton } from '../../components/forms'
-import { AppButton, AppTextButton } from '../../components'
+import { AppButton, AppTextButton, AppText } from '../../components'
 
 import useAuth from '../../Services/useAuth';
 import { CommonActions } from '@react-navigation/native';
@@ -79,6 +79,16 @@ const LoginScreen = ({ navigation }) => {
                     <AppTextButton containerStyle={{ backgroundColor: null }} btnTextStyle={{ color: colors.SECONDARY, fontSize: 15, textTransform: null }} title="Forgot password?" onPress={() => navigation.navigate("ForgotPassword")} />
                     <AppTextButton containerStyle={{ backgroundColor: null }} btnTextStyle={{ color: colors.PRIMARY, fontSize: 15, textTransform: null }} title="Register" onPress={() => navigation.navigate("Register")} />
                 </View>
+
+                <View style={{ flex: 1, marginTop: 10, justifyContent: "center", alignItems: "center" }}>
+                    <AppText style={{ color: colors.PRIMARY, fontFamily: "Asap-Regular" }}>
+                        Designed and Developed By
+                </AppText>
+                    <AppText style={{ color: colors.PRIMARY, fontFamily: "Asap-SemiBold" }}>
+                        Shakthi Sachintha (17001501)
+                    </AppText>
+                </View>
+
             </View>
 
 
